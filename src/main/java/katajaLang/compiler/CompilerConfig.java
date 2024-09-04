@@ -1,6 +1,6 @@
 package katajaLang.compiler;
 
-import java.io.File;
+import java.nio.file.Path;
 
 public final class CompilerConfig {
 
@@ -21,6 +21,16 @@ public final class CompilerConfig {
     }
 
     public static TargetType targetType = null;
-    public static File outFolder = null;
+    public static Path outFolder = null;
     public static boolean debug = false;
+
+    public static boolean isValid(){
+        return getError() == null;
+    }
+
+    public static String getError(){
+        if(targetType == null) return "Target type is not specified";
+
+        return null;
+    }
 }
