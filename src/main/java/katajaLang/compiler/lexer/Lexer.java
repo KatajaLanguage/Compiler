@@ -249,6 +249,6 @@ public final class Lexer {
     }
 
     private void err(String message) throws LexingException{
-        throw new LexingException(message);
+        throw new LexingException(message+" at "+filepath+":"+(lineOffset+line));
     }
 }

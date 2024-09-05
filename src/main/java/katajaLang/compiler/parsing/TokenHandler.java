@@ -177,11 +177,11 @@ public final class TokenHandler {
             setIndex(index);
         }
 
-        if(line < 0 || line >= token.length || this.index == -1 || this.index >= token[line].length) throw new ParsingException(sb.toString());
+        if(line < 0 || line >= token.length || this.index == -1 || this.index >= token[line].length) throw new ParsingException(sb+" at "+file+":"+getLine());
 
         sb.append(" ").append(current()).append(" ");
         if(hasNext()) sb.append(next());
 
-        throw new ParsingException(sb.toString());
+        throw new ParsingException(sb+" at "+file+":"+getLine());
     }
 }
