@@ -1,6 +1,6 @@
 package katajaLang.model;
 
-public class Class {
+public abstract class Class {
     
     public final AccessFlag accessFlag;
 
