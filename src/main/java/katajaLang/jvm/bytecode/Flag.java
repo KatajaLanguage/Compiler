@@ -1,6 +1,6 @@
 package katajaLang.jvm.bytecode;
 
-public interface AccessFlag {
+public interface Flag {
     int PUBLIC       = 0x0001;
     int PRIVATE      = 0x0002;
     int PROTECTED    = 0x0004;

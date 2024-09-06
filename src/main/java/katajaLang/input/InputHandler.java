@@ -1,7 +1,9 @@
 package katajaLang.input;
 
 import katajaLang.compiler.CompilerConfig;
+import katajaLang.jvm.bytecode.ClassWriter;
 
+import java.io.IOException;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Paths;
 import java.util.Scanner;
@@ -11,7 +13,9 @@ public final class InputHandler {
     private final Scanner scanner;
     private ArgumentHandler argHandler;
 
-    public InputHandler(String[] args){
+    public InputHandler(String[] args) throws IOException {
+        new ClassWriter().writeClass("Test");
+
         scanner = new Scanner(System.in);
 
         if(args.length == 0) {
