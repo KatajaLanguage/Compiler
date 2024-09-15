@@ -88,16 +88,16 @@ public final class Lexer {
         builder = new TokenBuilder();
     }
 
-    public TokenHandler lexFile(String filepath) throws FileNotFoundException, LexingException {
+    public TokenHandler lexFile(File file) throws FileNotFoundException, LexingException {
         StringBuilder codeBuilder = new StringBuilder();
-        Scanner sc = new Scanner(new File(filepath));
+        Scanner sc = new Scanner(file);
 
         while(sc.hasNextLine()){
             if(codeBuilder.length() > 0) codeBuilder.append("\n");
             codeBuilder.append(sc.nextLine().trim());
         }
 
-        return lexCode(codeBuilder.toString(), filepath, 0);
+        return lexCode(codeBuilder.toString(), file.getPath(), 0);
     }
 
     public TokenHandler lexCode(String code, String filepath, int lineOffset) throws LexingException{
@@ -113,7 +113,7 @@ public final class Lexer {
         return lexBuffer();
     }
 
-    public TokenHandler lexBuffer() throws LexingException{
+    private TokenHandler lexBuffer() throws LexingException{
         while(hasNext()){
             if(is(' ') || is('\t') || is('\r')){
                 skipChar();
