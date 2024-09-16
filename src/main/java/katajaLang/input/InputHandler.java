@@ -18,13 +18,10 @@ package katajaLang.input;
 
 import katajaLang.compiler.Compiler;
 import katajaLang.compiler.CompilerConfig;
-import katajaLang.jvm.JavaClass;
-import katajaLang.jvm.bytecode.ClassWriter;
-import katajaLang.model.AccessFlag;
 
-import java.io.IOException;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public final class InputHandler {
@@ -32,9 +29,7 @@ public final class InputHandler {
     private final Scanner scanner;
     private ArgumentHandler argHandler;
 
-    public InputHandler(String[] args) throws IOException {
-        new ClassWriter().writeClass(new JavaClass(AccessFlag.PRIVATE), "Test");
-
+    public InputHandler(String[] args) {
         scanner = new Scanner(System.in);
 
         if(args.length == 0) {
@@ -147,8 +142,12 @@ public final class InputHandler {
     private void compile(){
         Compiler c = new Compiler();
 
+        ArrayList<String> paths = new ArrayList<>();
+
+        while (argHandler.hasNextParameter()) paths.add(argHandler.advance().argument);
+
         try{
-            c.compile();
+            c.compile(paths.toArray(new String[0]));
         }catch(Exception e){
             e.printStackTrace();
         }

@@ -180,6 +180,7 @@ public final class Lexer {
 
                 buildToken();
             }else if(is('\n')){
+                skipChar();
                 newLine();
             }else if(is('\'')){
                 consumeChar();

@@ -16,7 +16,6 @@
 
 package katajaLang.compiler.parsing;
 
-import katajaLang.compiler.CompilingException;
 import katajaLang.compiler.lexer.Lexer;
 import katajaLang.compiler.lexer.TokenType;
 import katajaLang.model.AccessFlag;
@@ -50,9 +49,19 @@ public final class Parser {
         name = file.getName().substring(0, file.getName().length() - 4);
 
         while (th.hasNext()){
-
+            parseClass();
         }
 
         return classes;
+    }
+
+    private void parseClass(){
+        th.assertToken("class");
+        String name = path+"."+this.name+"."+th.assertToken(TokenType.IDENTIFIER).value;
+        th.assertToken("{");
+        th.assertToken("}");
+
+        if(!classes.containsKey(name)) classes.put(name, new Class(AccessFlag.PACKAGE));
+        else throw new ParsingException("Class "+name+" is already defined");
     }
 }

@@ -17,10 +17,12 @@
 package katajaLang.compiler;
 
 import katajaLang.compiler.parsing.Parser;
+import katajaLang.jvm.bytecode.ClassWriter;
 import katajaLang.model.Class;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashMap;
 
 public final class Compiler {
@@ -33,7 +35,7 @@ public final class Compiler {
         parser = new Parser();
     }
 
-    public void compile(String...files) throws FileNotFoundException {
+    public void compile(String...files) throws IOException {
         long startTime = System.nanoTime();
 
         for(String f:files){
@@ -48,6 +50,13 @@ public final class Compiler {
                 compileFile(file, file.getPath());
             }
         }
+
+        switch(CompilerConfig.targetType){
+            case Class:
+                ClassWriter cw = new ClassWriter();
+                for(String name: classes.keySet()) cw.writeClass(classes.get(name), name);
+                break;
+        }
     }
 
     private void compileFolder(File folder, String relative) throws FileNotFoundException {
@@ -59,5 +68,6 @@ public final class Compiler {
 
     private void compileFile(File file, String relative) throws FileNotFoundException {
         HashMap<String, Class> parsed = parser.parseFile(file, relative);
+        classes.putAll(parsed);
     }
 }

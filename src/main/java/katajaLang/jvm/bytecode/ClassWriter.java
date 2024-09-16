@@ -18,8 +18,8 @@ package katajaLang.jvm.bytecode;
 
 import katajaLang.compiler.CompilerConfig;
 import katajaLang.compiler.CompilingException;
-import katajaLang.jvm.JavaClass;
 import katajaLang.jvm.bytecode.constant.*;
+import katajaLang.model.Class;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -29,13 +29,13 @@ public final class ClassWriter {
     public static final int magic = 0xCAFEBABE;
 
     private FileOutputStream stream;
-    private JavaClass clazz;
+    private Class clazz;
 
     public ClassWriter(){
 
     }
 
-    public void writeClass(JavaClass clazz, String className) throws IOException, CompilingException {
+    public void writeClass(Class clazz, String className) throws IOException, CompilingException {
         this.clazz = clazz;
         createFile(className);
 
@@ -60,6 +60,8 @@ public final class ClassWriter {
         }
 
         if(!file.createNewFile()) throw new CompilingException("Failed to create "+file.getAbsolutePath());
+
+        System.out.println(file.getAbsolutePath());
 
         stream = new FileOutputStream(file);
 
@@ -172,7 +174,7 @@ public final class ClassWriter {
     }
 
     private void writeClassInfo() throws IOException {
-        write2(clazz.getAccessFlag());
+        write2(0);
         write2(1);
         write2(2);
     }

@@ -1,0 +1,4 @@
+class Test{}
+
+##
+-t class -o out -c src/test/kataja/Test.ktj
