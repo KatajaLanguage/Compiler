@@ -1,4 +1,4 @@
-class Test{}
+protected class Test{}
 
 ##
--t class -o out -c src/test/kataja/Test.ktj
+-t class -o out -c src/test/kataja/Test.ktj -q

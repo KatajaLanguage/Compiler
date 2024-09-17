@@ -19,6 +19,7 @@ package katajaLang.compiler;
 import katajaLang.compiler.parsing.Parser;
 import katajaLang.jvm.bytecode.ClassWriter;
 import katajaLang.model.Class;
+import sun.security.pkcs.ParsingException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -59,15 +60,19 @@ public final class Compiler {
         }
     }
 
-    private void compileFolder(File folder, String relative) throws FileNotFoundException {
+    private void compileFolder(File folder, String relative) throws FileNotFoundException, ParsingException {
         for(File file:folder.listFiles()){
             if(file.isDirectory()) compileFolder(file, relative);
             else if(file.getName().endsWith(".ktj")) compileFile(file, relative);
         }
     }
 
-    private void compileFile(File file, String relative) throws FileNotFoundException {
+    private void compileFile(File file, String relative) throws FileNotFoundException, ParsingException {
         HashMap<String, Class> parsed = parser.parseFile(file, relative);
-        classes.putAll(parsed);
+
+        for(String name: parsed.keySet()){
+            if(classes.containsKey(name)) throw new ParsingException("Class "+name+" is already defined");
+            else classes.putAll(parsed);
+        }
     }
 }

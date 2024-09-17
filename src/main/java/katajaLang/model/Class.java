@@ -18,9 +18,9 @@ package katajaLang.model;
 
 public class Class {
     
-    public final AccessFlag accessFlag;
+    public final Modifier mod;
 
-    public Class(AccessFlag accessFlag){
-        this.accessFlag = accessFlag;
+    public Class(Modifier mod){
+        this.mod = mod;
     }
 }

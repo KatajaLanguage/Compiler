@@ -61,8 +61,6 @@ public final class ClassWriter {
 
         if(!file.createNewFile()) throw new CompilingException("Failed to create "+file.getAbsolutePath());
 
-        System.out.println(file.getAbsolutePath());
-
         stream = new FileOutputStream(file);
 
         write4(magic);

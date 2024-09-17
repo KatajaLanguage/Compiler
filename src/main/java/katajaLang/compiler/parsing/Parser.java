@@ -20,6 +20,7 @@ import katajaLang.compiler.lexer.Lexer;
 import katajaLang.compiler.lexer.TokenType;
 import katajaLang.model.AccessFlag;
 import katajaLang.model.Class;
+import katajaLang.model.Modifier;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -49,19 +50,42 @@ public final class Parser {
         name = file.getName().substring(0, file.getName().length() - 4);
 
         while (th.hasNext()){
-            parseClass();
+            parseMod();
         }
 
         return classes;
     }
 
-    private void parseClass(){
-        th.assertToken("class");
-        String name = path+"."+this.name+"."+th.assertToken(TokenType.IDENTIFIER).value;
+    private void parseMod(){
+        AccessFlag acc;
+
+        if(th.isNext("public")) acc = AccessFlag.PUBLIC;
+        else if(th.isNext("private")) acc = AccessFlag.PRIVATE;
+        else if(th.isNext("protected")) acc = AccessFlag.PROTECTED;
+        else acc = AccessFlag.PACKAGE;
+
+        Modifier mod = new Modifier(acc);
+
+        switch(th.assertToken(TokenType.IDENTIFIER).value){
+            case "class":
+                parseClass(mod);
+                break;
+        }
+    }
+
+    private void parseClass(Modifier mod){
+        String name = (path.isEmpty() ? "" : path+".")+this.name+"."+th.assertToken(TokenType.IDENTIFIER).value;
+
+        if(mod.isInvalidForClass()) err("Illegal Modifier for class "+name);
+
         th.assertToken("{");
         th.assertToken("}");
 
-        if(!classes.containsKey(name)) classes.put(name, new Class(AccessFlag.PACKAGE));
+        if(!classes.containsKey(name)) classes.put(name, new Class(mod));
         else throw new ParsingException("Class "+name+" is already defined");
+    }
+
+    private void err(String message) throws ParsingException{
+        throw new ParsingException(message+" at "+(path.isEmpty() ? "" : path.replace(".", "/")+"/")+name+".ktj:"+th.getLine());
     }
 }

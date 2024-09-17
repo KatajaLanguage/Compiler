@@ -149,7 +149,12 @@ public final class InputHandler {
         try{
             c.compile(paths.toArray(new String[0]));
         }catch(Exception e){
-            e.printStackTrace();
+            if(CompilerConfig.debug) e.printStackTrace();
+            else System.err.println(e.getMessage());
+
+            try {
+                Thread.sleep(200);
+            }catch(InterruptedException ignored){}
         }
     }
 }
