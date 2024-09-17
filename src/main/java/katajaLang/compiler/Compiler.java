@@ -17,8 +17,8 @@
 package katajaLang.compiler;
 
 import katajaLang.compiler.parsing.Parser;
+import katajaLang.jvm.bytecode.ByteCodeWriter;
 import katajaLang.jvm.bytecode.ClassWriter;
-import katajaLang.model.Class;
 import katajaLang.model.Compilable;
 import sun.security.pkcs.ParsingException;
 
@@ -54,7 +54,7 @@ public final class Compiler {
         }
 
         switch(CompilerConfig.targetType){
-            case Class:
+            case Class52:
                 ClassWriter cw = new ClassWriter();
                 for(String name: classes.keySet()) cw.writeClass(classes.get(name), name);
                 break;

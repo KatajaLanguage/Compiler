@@ -21,15 +21,15 @@ import java.nio.file.Path;
 public final class CompilerConfig {
 
     public enum TargetType{
-        Class,
-        Jar;
+        Class52,
+        Jar52;
 
         public static TargetType ofString(String type) throws IllegalArgumentException{
             switch(type){
-                case "class":
-                    return Class;
-                case "jar":
-                    return Jar;
+                case "class 52":
+                    return Class52;
+                case "jar 52":
+                    return Jar52;
                 default:
                     return null;
             }
