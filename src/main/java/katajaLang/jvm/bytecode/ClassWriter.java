@@ -20,6 +20,7 @@ import katajaLang.compiler.CompilerConfig;
 import katajaLang.compiler.CompilingException;
 import katajaLang.jvm.bytecode.constant.*;
 import katajaLang.model.Class;
+import katajaLang.model.Modifier;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -39,8 +40,8 @@ public final class ClassWriter {
         this.clazz = clazz;
         createFile(className);
 
-        writeConstPool();
-        writeClassInfo();
+        writeConstPool(className);
+        writeClassInfo(clazz.mod);
         writeInterfaces();
         writeFields();
         writeMethods();
@@ -56,7 +57,7 @@ public final class ClassWriter {
         if(file.exists()){
             if(!file.delete()) throw new CompilingException("Failed to delete "+file.getAbsolutePath());
         }else{
-            if(file.getParentFile() != null && !file.getParentFile().mkdirs()) throw new CompilingException("Failed to create "+file.getParentFile().getAbsolutePath());
+            if(file.getParentFile() != null && !file.getParentFile().exists() && !file.getParentFile().mkdirs()) throw new CompilingException("Failed to create "+file.getParentFile().getAbsolutePath());
         }
 
         if(!file.createNewFile()) throw new CompilingException("Failed to create "+file.getAbsolutePath());
@@ -68,13 +69,13 @@ public final class ClassWriter {
         write2(52);
     }
 
-    private void writeConstPool() throws IOException {
+    private void writeConstPool(String className) throws IOException {
         write2(5);
         write(7);
         write2(3);
         write(7);
         write2(4);
-        writeUtf8(new Utf8Info("Test"));
+        writeUtf8(new Utf8Info(className));
         writeUtf8(new Utf8Info("java/lang/Object"));
     }
 
@@ -171,8 +172,8 @@ public final class ClassWriter {
         write2(info.name_index);
     }
 
-    private void writeClassInfo() throws IOException {
-        write2(0);
+    private void writeClassInfo(Modifier mod) throws IOException {
+        write2(getFlag(mod));
         write2(1);
         write2(2);
     }
@@ -191,6 +192,24 @@ public final class ClassWriter {
 
     private void writeAttributes() throws IOException {
         write2(0);
+    }
+
+    private int getFlag(Modifier mod){
+        int acc = 0;
+
+        switch(mod.acc){
+            case PUBLIC:
+                acc += Flag.PUBLIC;
+                break;
+            case PRIVATE:
+                acc += Flag.PRIVATE;
+                break;
+            case PROTECTED:
+                acc += Flag.PROTECTED;
+                break;
+        }
+
+        return acc;
     }
 
     private void write8(long i) throws IOException {

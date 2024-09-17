@@ -74,7 +74,7 @@ public final class Parser {
     }
 
     private void parseClass(Modifier mod){
-        String name = (path.isEmpty() ? "" : path+".")+this.name+"."+th.assertToken(TokenType.IDENTIFIER).value;
+        String name = (path.isEmpty() ? "" : path+"/")+this.name+"/"+th.assertToken(TokenType.IDENTIFIER).value;
 
         if(mod.isInvalidForClass()) err("Illegal Modifier for class "+name);
 
@@ -86,6 +86,6 @@ public final class Parser {
     }
 
     private void err(String message) throws ParsingException{
-        throw new ParsingException(message+" at "+(path.isEmpty() ? "" : path.replace(".", "/")+"/")+name+".ktj:"+th.getLine());
+        throw new ParsingException(message+" at "+(path.isEmpty() ? "" : path+"/")+name+".ktj:"+th.getLine());
     }
 }

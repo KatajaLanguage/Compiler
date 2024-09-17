@@ -72,7 +72,7 @@ public final class Compiler {
 
         for(String name: parsed.keySet()){
             if(classes.containsKey(name)) throw new ParsingException("Class "+name+" is already defined");
-            else classes.putAll(parsed);
+            else classes.put(name, parsed.get(name));
         }
     }
 }
