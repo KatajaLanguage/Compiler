@@ -18,9 +18,8 @@ package katajaLang.compiler.parsing;
 
 import katajaLang.compiler.lexer.Lexer;
 import katajaLang.compiler.lexer.TokenType;
-import katajaLang.model.AccessFlag;
+import katajaLang.model.*;
 import katajaLang.model.Class;
-import katajaLang.model.Modifier;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -30,7 +29,7 @@ public final class Parser {
 
     private final Lexer lexer;
 
-    private HashMap<String, Class> classes;
+    private HashMap<String, Compilable> classes;
     private TokenHandler th;
     private String path;
     private String name;
@@ -39,7 +38,7 @@ public final class Parser {
         lexer = new Lexer();
     }
 
-    public HashMap<String, Class> parseFile(File file, String folder) throws FileNotFoundException {
+    public HashMap<String, Compilable> parseFile(File file, String folder) throws FileNotFoundException {
         th = lexer.lexFile(file);
         classes = new HashMap<>();
 
@@ -70,11 +69,16 @@ public final class Parser {
             case "class":
                 parseClass(mod);
                 break;
+            case "interface":
+                parseInterface(mod);
+                break;
+            default:
+                err("Illegal argument '"+th.current().value+"'");
         }
     }
 
     private void parseClass(Modifier mod){
-        String name = (path.isEmpty() ? "" : path+"/")+this.name+"/"+th.assertToken(TokenType.IDENTIFIER).value;
+        String name = parseName();
 
         if(mod.isInvalidForClass()) err("Illegal Modifier for class "+name);
 
@@ -83,6 +87,22 @@ public final class Parser {
 
         if(!classes.containsKey(name)) classes.put(name, new Class(mod));
         else throw new ParsingException("Class "+name+" is already defined");
+    }
+
+    private void parseInterface(Modifier mod){
+        String name = parseName();
+
+        if(mod.isInvalidForInterface()) err("Illegal Modifier for interface "+name);
+
+        th.assertToken("{");
+        th.assertToken("}");
+
+        if(!classes.containsKey(name)) classes.put(name, new Interface(mod));
+        else throw new ParsingException("Class "+name+" is already defined");
+    }
+
+    private String parseName(){
+        return (path.isEmpty() ? "" : path+"/")+this.name+"/"+th.assertToken(TokenType.IDENTIFIER).value;
     }
 
     private void err(String message) throws ParsingException{

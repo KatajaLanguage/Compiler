@@ -19,6 +19,7 @@ package katajaLang.compiler;
 import katajaLang.compiler.parsing.Parser;
 import katajaLang.jvm.bytecode.ClassWriter;
 import katajaLang.model.Class;
+import katajaLang.model.Compilable;
 import sun.security.pkcs.ParsingException;
 
 import java.io.File;
@@ -28,7 +29,7 @@ import java.util.HashMap;
 
 public final class Compiler {
 
-    private final HashMap<String, Class> classes;
+    private final HashMap<String, Compilable> classes;
     private final Parser parser;
 
     public Compiler(){
@@ -68,7 +69,7 @@ public final class Compiler {
     }
 
     private void compileFile(File file, String relative) throws FileNotFoundException, ParsingException {
-        HashMap<String, Class> parsed = parser.parseFile(file, relative);
+        HashMap<String, Compilable> parsed = parser.parseFile(file, relative);
 
         for(String name: parsed.keySet()){
             if(classes.containsKey(name)) throw new ParsingException("Class "+name+" is already defined");

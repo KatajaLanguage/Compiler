@@ -16,11 +16,9 @@
 
 package katajaLang.model;
 
-public class Class {
-    
-    public final Modifier mod;
+public class Class extends Compilable{
 
     public Class(Modifier mod){
-        this.mod = mod;
+        super(mod);
     }
 }

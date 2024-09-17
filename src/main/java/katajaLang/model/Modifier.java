@@ -10,4 +10,8 @@ public class Modifier {
     public boolean isInvalidForClass(){
         return acc == AccessFlag.PROTECTED;
     }
+
+    public boolean isInvalidForInterface(){
+        return acc == AccessFlag.PROTECTED;
+    }
 }

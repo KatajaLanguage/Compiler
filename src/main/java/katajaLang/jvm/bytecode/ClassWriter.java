@@ -20,6 +20,8 @@ import katajaLang.compiler.CompilerConfig;
 import katajaLang.compiler.CompilingException;
 import katajaLang.jvm.bytecode.constant.*;
 import katajaLang.model.Class;
+import katajaLang.model.Compilable;
+import katajaLang.model.Interface;
 import katajaLang.model.Modifier;
 
 import java.io.File;
@@ -30,18 +32,18 @@ public final class ClassWriter {
     public static final int magic = 0xCAFEBABE;
 
     private FileOutputStream stream;
-    private Class clazz;
+    private Compilable clazz;
 
     public ClassWriter(){
 
     }
 
-    public void writeClass(Class clazz, String className) throws IOException, CompilingException {
+    public void writeClass(Compilable clazz, String className) throws IOException, CompilingException {
         this.clazz = clazz;
         createFile(className);
 
         writeConstPool(className);
-        writeClassInfo(clazz.mod);
+        writeClassInfo();
         writeInterfaces();
         writeFields();
         writeMethods();
@@ -172,8 +174,8 @@ public final class ClassWriter {
         write2(info.name_index);
     }
 
-    private void writeClassInfo(Modifier mod) throws IOException {
-        write2(getFlag(mod));
+    private void writeClassInfo() throws IOException {
+        write2(getFlag(clazz.mod) + (clazz instanceof Interface ? Flag.INTERFACE : 0));
         write2(1);
         write2(2);
     }
