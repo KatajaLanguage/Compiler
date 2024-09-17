@@ -27,8 +27,10 @@ public final class CompilerConfig {
         public static TargetType ofString(String type) throws IllegalArgumentException{
             switch(type){
                 case "class 52":
+                case "class":
                     return Class52;
                 case "jar 52":
+                case "jar":
                     return Jar52;
                 default:
                     return null;

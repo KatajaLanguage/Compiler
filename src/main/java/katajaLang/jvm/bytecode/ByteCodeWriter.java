@@ -23,20 +23,20 @@ import katajaLang.model.Compilable;
 import katajaLang.model.Interface;
 import katajaLang.model.Modifier;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 public final class ByteCodeWriter {
     public static final int magic = 0xCAFEBABE;
 
-    private FileOutputStream stream;
+    private OutputStream stream;
     private Compilable clazz;
 
     public ByteCodeWriter(){
 
     }
 
-    public void writeClass(FileOutputStream stream, Compilable clazz, String className) throws IOException, CompilingException {
+    public void writeClass(OutputStream stream, Compilable clazz, String className) throws IOException, CompilingException {
         this.stream = stream;
         this.clazz = clazz;
 
@@ -46,9 +46,6 @@ public final class ByteCodeWriter {
         writeFields();
         writeMethods();
         writeAttributes();
-
-        stream.flush();
-        stream.close();
     }
 
     private void writeVersion() throws IOException {

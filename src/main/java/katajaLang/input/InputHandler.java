@@ -92,6 +92,9 @@ public final class InputHandler {
     private void setTarget(){
         if(argHandler.hasNextParameter()){
             String value = argHandler.advance().argument;
+
+            if(argHandler.hasNextParameter()) value += " "+argHandler.advance().argument;
+
             CompilerConfig.TargetType type = CompilerConfig.TargetType.ofString(value);
 
             if(type == null) System.err.println("Type '"+value+"' is not supported");
@@ -128,7 +131,7 @@ public final class InputHandler {
         System.out.println("<----------Help---------->");
         System.out.println("General Info:");
         System.out.println("\nAvailable target types:");
-        System.out.println("class\njar");
+        System.out.println("class\nclass 52\njar\njar 52");
         System.out.println("\nAvailable commands:");
         System.out.println("-c <string...> : compiles the given files/folder");
         System.out.println("-d <boolean>   : enable debug");

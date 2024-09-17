@@ -19,6 +19,7 @@ package katajaLang.compiler;
 import katajaLang.compiler.parsing.Parser;
 import katajaLang.jvm.bytecode.ByteCodeWriter;
 import katajaLang.jvm.bytecode.ClassWriter;
+import katajaLang.jvm.bytecode.JarWriter;
 import katajaLang.model.Compilable;
 import sun.security.pkcs.ParsingException;
 
@@ -57,6 +58,11 @@ public final class Compiler {
             case Class52:
                 ClassWriter cw = new ClassWriter();
                 for(String name: classes.keySet()) cw.writeClass(classes.get(name), name);
+                break;
+            case Jar52:
+                JarWriter jw = new JarWriter("Program");
+                for(String name: classes.keySet()) jw.writeClass(classes.get(name), name);
+                jw.close();
                 break;
         }
     }

@@ -33,7 +33,10 @@ public final class ClassWriter {
     }
 
     public void writeClass(Compilable clazz, String className) throws IOException, CompilingException {
-        writer.writeClass(createFile(className), clazz, className);
+        FileOutputStream stream = createFile(className);
+        writer.writeClass(stream, clazz, className);
+        stream.flush();
+        stream.close();
     }
 
     private FileOutputStream createFile(String className) throws IOException, CompilingException {
