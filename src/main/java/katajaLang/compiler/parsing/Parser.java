@@ -63,7 +63,27 @@ public final class Parser {
         else if(th.isNext("protected")) acc = AccessFlag.PROTECTED;
         else acc = AccessFlag.PACKAGE;
 
-        Modifier mod = new Modifier(acc);
+        Modifier mod = null;
+
+        boolean abstrakt = false;
+        boolean finaly = false;
+
+        while(mod == null){
+            switch(th.assertToken(TokenType.IDENTIFIER).value){
+                case "abstract":
+                    if(abstrakt) err("Is already abstract");
+                    abstrakt = true;
+                    break;
+                case "final":
+                    if(finaly) err("Is already final");
+                    finaly = true;
+                    break;
+                default:
+                    th.last();
+                    mod = new Modifier(acc, abstrakt, finaly);
+                    break;
+            }
+        }
 
         switch(th.assertToken(TokenType.IDENTIFIER).value){
             case "class":

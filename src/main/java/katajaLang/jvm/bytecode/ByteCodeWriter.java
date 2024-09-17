@@ -40,6 +40,7 @@ public final class ByteCodeWriter {
         this.stream = stream;
         this.clazz = clazz;
 
+        writeVersion();
         writeConstPool(className);
         writeClassInfo();
         writeInterfaces();
@@ -197,6 +198,9 @@ public final class ByteCodeWriter {
                 acc += Flag.PROTECTED;
                 break;
         }
+
+        if(mod.abstrakt) acc += Flag.ABSTRACT;
+        if(mod.finaly) acc += Flag.FINAL;
 
         return acc;
     }

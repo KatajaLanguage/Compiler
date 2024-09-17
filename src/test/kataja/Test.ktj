@@ -1,4 +1,4 @@
-private class Test{}
+private final class Test{}
 public interface ABC{}
 ##
 -t class 52 -d true -o out -c src/test/kataja/Test.ktj -q
