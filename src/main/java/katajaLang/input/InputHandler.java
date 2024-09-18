@@ -128,10 +128,10 @@ public final class InputHandler {
     }
 
     private void printHelp(){
-        System.out.println("<----------Help---------->");
-        System.out.println("General Info:");
-        System.out.println("\nAvailable target types:");
-        System.out.println("class\nclass 52\njar\njar 52");
+        System.out.println("<---------------Help--------------->");
+        System.out.println();
+        System.out.println("Available target types:");
+        System.out.println("class\nclass 52\nclass 55\nclass 61\njar\njar 52\njar 55\njar 61");
         System.out.println("\nAvailable commands:");
         System.out.println("-c <string...> : compiles the given files/folder");
         System.out.println("-d <boolean>   : enable debug");
@@ -139,7 +139,8 @@ public final class InputHandler {
         System.out.println("-o <string>    : set out put folder");
         System.out.println("-q             : quit Compiler");
         System.out.println("-t <string>    : set target type");
-        System.out.println("<------------------------>");
+        System.out.println();
+        System.out.println("<---------------------------------->");
     }
 
     private void compile(){

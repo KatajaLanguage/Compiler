@@ -54,7 +54,16 @@ public final class ByteCodeWriter {
         write2(0);
         switch(CompilerConfig.targetType){
             case Class52:
+            case Jar52:
                 write2(52);
+                break;
+            case Class55:
+            case Jar55:
+                write2(55);
+                break;
+            case Class61:
+            case Jar61:
+                write2(61);
                 break;
         }
     }

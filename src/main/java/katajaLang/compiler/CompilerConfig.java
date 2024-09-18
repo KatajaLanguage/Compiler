@@ -22,19 +22,50 @@ public final class CompilerConfig {
 
     public enum TargetType{
         Class52,
-        Jar52;
+        Class55,
+        Class61,
+        Jar52,
+        Jar55,
+        Jar61;
 
         public static TargetType ofString(String type) throws IllegalArgumentException{
             switch(type){
-                case "class 52":
                 case "class":
-                    return Class52;
-                case "jar 52":
                 case "jar":
+                    return TargetType.ofString(type+" "+getSupportedLTSVersion());
+                case "class 52":
+                    return Class52;
+                case "class 55":
+                    return Class55;
+                case "class 61":
+                    return Class61;
+                case "jar 52":
                     return Jar52;
+                case "jar 55":
+                    return Jar55;
+                case "jar 61":
+                    return Jar61;
                 default:
                     return null;
             }
+        }
+
+        private static int getSupportedLTSVersion(){
+            String versionString = System.getProperty("java.version");
+            int version;
+
+            if(versionString.startsWith("1."))
+                version = Integer.parseInt(versionString.split("\\.")[1]);
+            else
+                version = Integer.parseInt(versionString.split("\\.")[0]);
+
+            // Not supported versions
+            if(version < 8) return -1;
+
+            // Supported versions
+            if(version >= 17) return 61;
+            if(version >= 11) return 55;
+            return 52;
         }
     }
 
