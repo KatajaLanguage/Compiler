@@ -16,6 +16,9 @@
 
 package katajaLang.jvm.bytecode;
 
+/**
+ * List of all AccessFlags supported by the Java Virtual Machine
+ */
 public interface Flag {
     int PUBLIC       = 0x0001;
     int PRIVATE      = 0x0002;

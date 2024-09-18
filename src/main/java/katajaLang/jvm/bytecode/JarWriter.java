@@ -26,6 +26,9 @@ import java.nio.file.Files;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 
+/**
+ * Class to write Jar Files
+ */
 public class JarWriter {
 
     private final JarOutputStream stream;

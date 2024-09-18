@@ -26,6 +26,9 @@ import katajaLang.model.Modifier;
 import java.io.IOException;
 import java.io.OutputStream;
 
+/**
+ * Class to write java bytecode
+ */
 public final class ByteCodeWriter {
     public static final int magic = 0xCAFEBABE;
 

@@ -24,6 +24,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+/**
+ * Class to write .class Files for parsed Classes
+ */
 public final class ClassWriter {
 
     private final ByteCodeWriter writer;

@@ -16,6 +16,9 @@
 
 package katajaLang.jvm.bytecode;
 
+/**
+ * List of all Opcode Instructions for the Java Virtual Machine
+ */
 public interface Opcode {
     int nop             = 0x00;
     int aconst_null     = 0x01;
