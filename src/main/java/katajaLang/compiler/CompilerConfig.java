@@ -18,8 +18,14 @@ package katajaLang.compiler;
 
 import java.nio.file.Path;
 
+/**
+ * Class for Compiler Configuration
+ */
 public final class CompilerConfig {
 
+    /**
+     * Representation of the Compiler Target Type
+     */
     public enum TargetType{
         Class52,
         Class55,
@@ -28,11 +34,14 @@ public final class CompilerConfig {
         Jar55,
         Jar61;
 
+        /**
+         * Converts the given String to the corresponding Target Type
+         */
         public static TargetType ofString(String type) throws IllegalArgumentException{
             switch(type){
                 case "class":
                 case "jar":
-                    return TargetType.ofString(type+" "+getSupportedLTSVersion());
+                    return TargetType.ofString(type+" "+ getSupportedJavaLTSVersion());
                 case "class 52":
                     return Class52;
                 case "class 55":
@@ -50,7 +59,10 @@ public final class CompilerConfig {
             }
         }
 
-        private static int getSupportedLTSVersion(){
+        /**
+         * Returns the highest supported Java LTS version that is supported on the Computer of the User. If no Java LTS Version is supported -1 will be returned
+         */
+        private static int getSupportedJavaLTSVersion(){
             String versionString = System.getProperty("java.version");
             int version;
 

@@ -21,6 +21,9 @@ import katajaLang.compiler.lexer.TokenType;
 
 import java.util.Arrays;
 
+/**
+ * Class for handling tokens
+ */
 public final class TokenHandler {
 
     private final Token[][] token;
@@ -37,6 +40,9 @@ public final class TokenHandler {
         index = -1;
     }
 
+    /**
+     * Advances to the next Token and returns it
+     */
     public Token next(){
         if(index + 1 < token[line].length){
             index++;
@@ -53,11 +59,17 @@ public final class TokenHandler {
         return new Token(null, null); // unreachable statement
     }
 
+    /**
+     * Returns the current Token
+     */
     public Token current(){
         if(index == -1 || index >= token[line].length) err("Expected Token got nothing");
         return token[line][index];
     }
 
+    /**
+     * Gets back to the last Token and returns it
+     */
     public Token last(){
         if(index > 0){
             index--;
@@ -75,6 +87,9 @@ public final class TokenHandler {
         return new Token(null, null);
     }
 
+    /**
+     * Assert that the next Token equals one of the given values. If method succeeded, it returns the Token
+     */
     public Token assertToken(String...strings){
         Token t = next();
 
@@ -84,6 +99,9 @@ public final class TokenHandler {
         return new Token(null, null); // unreachable statement
     }
 
+    /**
+     * Assert that the next Token has one of the given Types. If method succeeded, it returns the Token
+     */
     public Token assertTokenTypes(TokenType...types){
         Token t = next();
 
@@ -93,6 +111,9 @@ public final class TokenHandler {
         return new Token(null, null); // unreachable statement
     }
 
+    /**
+     * Assert that the next Token equals one of the given types or the given value. If method succeeded, it returns the Token
+     */
     public Token assertToken(TokenType type, String...strings){
         Token t = next();
 
@@ -104,6 +125,9 @@ public final class TokenHandler {
         return new Token(null, null); // unreachable statement
     }
 
+    /**
+     * Assert that the next Token equals one of the given types or one of the given values. If method succeeded, it returns the Token
+     */
     public Token assertToken(TokenType type1, TokenType type2,String...strings){
         Token t = next();
 
@@ -116,15 +140,24 @@ public final class TokenHandler {
         return new Token(null, null); // unreachable statement
     }
 
+    /**
+     * Assert that the next Token is a ';' or that the Handler reached the end of the Line
+     */
     public void assertEndOfStatement(){
         if(index + 1 != token[line].length) assertToken(";");
     }
 
+    /**
+     * Assert that a next Token is available
+     */
     public void assertHasNext(){
         next();
         last();
     }
 
+    /**
+     * Returns whether the next Token, if it is available, has the given value
+     */
     public boolean isNext(String string){
         if(!hasNext()) return false;
         if(next().equals(string)) return true;
@@ -133,6 +166,9 @@ public final class TokenHandler {
         return false;
     }
 
+    /**
+     * Returns whether the next Token, if it is available, has the given type
+     */
     public boolean isNext(TokenType type){
         if(next().equals(type)) return true;
 
@@ -140,12 +176,18 @@ public final class TokenHandler {
         return false;
     }
 
+    /**
+     * Returns whether the next Token is a ';' or that the Handler reached the end of the Line
+     */
     public boolean isEndOfStatement(){
         if(index + 1 == token[line].length) return true;
 
         return isNext(";");
     }
 
+    /**
+     * Returns whether the handler has a next Token
+     */
     public boolean hasNext(){
         String index = getIndex();
         if(line < token.length && this.index + 1 < token[line].length){
@@ -163,16 +205,25 @@ public final class TokenHandler {
         return false;
     }
 
+    /**
+     * Returns a String that represent the current Position of the Handler
+     */
     public String getIndex(){
         return line +":"+index;
     }
 
+    /**
+     * Restores the position of the Handler to the given Position
+     */
     public void setIndex(String index){
         String[] s = index.split(":");
         line = Integer.parseInt(s[0]);
         this.index = Integer.parseInt(s[1]);
     }
 
+    /**
+     * Returns the Line of the current Position of the Handler, within the original File
+     */
     public int getLine(){
         if(lineOffset > 0) return lineOffset + line;
         return line + 1;

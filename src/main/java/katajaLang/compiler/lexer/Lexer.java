@@ -25,8 +25,14 @@ import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
 
+/**
+ * Lexer for tokenizing Kataja Files
+ */
 public final class Lexer {
 
+    /**
+     * Class for building tokens
+     */
     private final class TokenBuilder{
         private StringBuilder valueBuilder;
         private TokenType type;
@@ -56,6 +62,9 @@ public final class Lexer {
         }
     }
 
+    /**
+     * Set of all valid operator characters
+     */
     public static final Set<Character> OPERATORS;
 
     static{
@@ -88,6 +97,9 @@ public final class Lexer {
         builder = new TokenBuilder();
     }
 
+    /**
+     * tokenizes the given file
+     */
     public TokenHandler lexFile(File file) throws FileNotFoundException, LexingException {
         StringBuilder codeBuilder = new StringBuilder();
         Scanner sc = new Scanner(file);
@@ -100,6 +112,9 @@ public final class Lexer {
         return lexCode(codeBuilder.toString(), file.getPath(), 0);
     }
 
+    /**
+     * tokenizes the given code
+     */
     public TokenHandler lexCode(String code, String filepath, int lineOffset) throws LexingException{
         this.filepath = filepath;
         this.lineOffset = lineOffset;

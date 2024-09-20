@@ -24,6 +24,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Class for handling user input
+ */
 public final class InputHandler {
 
     private final Scanner scanner;
@@ -32,7 +35,7 @@ public final class InputHandler {
     public InputHandler(String[] args) {
         scanner = new Scanner(System.in);
 
-        if(args.length == 0) {
+        if(args == null || args.length == 0) {
             System.out.println("run '-h' for help");
             nextLine();
         }else{

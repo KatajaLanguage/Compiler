@@ -25,7 +25,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
- * Class to write .class Files for parsed Classes
+ * Class to write Class Files
  */
 public final class ClassWriter {
 
@@ -35,6 +35,9 @@ public final class ClassWriter {
         writer = new ByteCodeWriter();
     }
 
+    /**
+     * Writes the Class File for the given Class
+     */
     public void writeClass(Compilable clazz, String className) throws IOException, CompilingException {
         FileOutputStream stream = createFile(className);
         writer.writeClass(stream, clazz, className);

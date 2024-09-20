@@ -34,6 +34,9 @@ public class JarWriter {
     private final JarOutputStream stream;
     private final ByteCodeWriter writer;
 
+    /**
+     * Creates a new Jar file and opens an OutputStream
+     */
     public JarWriter(String name) throws IOException {
         File file = new File((CompilerConfig.outFolder == null ? "" : CompilerConfig.outFolder+"/")+name.replace(".", "/")+".jar");
 
@@ -46,12 +49,18 @@ public class JarWriter {
         writer = new ByteCodeWriter();
     }
 
+    /**
+     * writes the given class in to the
+     */
     public void writeClass(Compilable clazz, String className) throws IOException, CompilingException {
         stream.putNextEntry(new JarEntry(className+".class"));
         writer.writeClass(stream, clazz, className);
         stream.closeEntry();
     }
 
+    /**
+     * Closes the OutputStream
+     */
     public void close() throws IOException {
         stream.close();
     }
