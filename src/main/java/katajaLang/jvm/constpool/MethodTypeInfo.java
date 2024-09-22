@@ -14,7 +14,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package katajaLang.jvm.bytecode.constant;
+package katajaLang.jvm.constpool;
 
 public class MethodTypeInfo implements ConstantInfo{
     public static final short tag = 16;

@@ -14,13 +14,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package katajaLang.jvm.bytecode.constant;
+package katajaLang.jvm.constpool;
 
-public class DoubleInfo implements ConstantInfo{
-    public static final short tag = 6;
-    public final double value;
+public class IntegerInfo implements ConstantInfo{
+    public static final short tag = 3;
+    public final int value;
 
-    public DoubleInfo(double value){
+    public IntegerInfo(int value){
         this.value = value;
     }
 }

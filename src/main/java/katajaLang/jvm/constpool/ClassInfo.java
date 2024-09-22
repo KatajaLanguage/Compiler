@@ -14,13 +14,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package katajaLang.jvm.bytecode.constant;
+package katajaLang.jvm.constpool;
 
-public class Utf8Info implements ConstantInfo{
-    public static final short tag = 1;
-    public final String value;
+public class ClassInfo implements ConstantInfo{
+    public static final short tag = 7;
+    public final short name_index;
 
-    public Utf8Info(String value){
-        this.value = value;
+    public ClassInfo(short name_index){
+        this.name_index = name_index;
     }
 }

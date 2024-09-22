@@ -14,13 +14,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package katajaLang.jvm.bytecode.constant;
+package katajaLang.jvm.constpool;
 
-public class FloatInfo implements ConstantInfo{
-    public static final short tag = 3;
-    public final float value;
+public interface ConstantInfo {
 
-    public FloatInfo(float value){
-        this.value = value;
-    }
 }

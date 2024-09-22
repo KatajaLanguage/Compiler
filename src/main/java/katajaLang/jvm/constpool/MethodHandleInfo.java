@@ -14,8 +14,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package katajaLang.jvm.bytecode.constant;
+package katajaLang.jvm.constpool;
 
-public interface ConstantInfo {
+public class MethodHandleInfo implements ConstantInfo{
+    public static final short tag = 15;
+    public final short reference_kind;
+    public final short reference_index;
 
+    public MethodHandleInfo(short reference_kind, short reference_index){
+        this.reference_kind = reference_kind;
+        this.reference_index = reference_index;
+    }
 }

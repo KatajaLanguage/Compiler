@@ -14,15 +14,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package katajaLang.jvm.bytecode.constant;
+package katajaLang.jvm.constpool;
 
-public class InvokeDynamicInfo implements ConstantInfo{
-    public static final short tag = 18;
-    public final short bootstrap_method_attr_index;
+public class FieldRefInfo implements ConstantInfo{
+    public static final short tag = 9;
+    public final short class_index;
     public final short name_and_type_index;
 
-    public InvokeDynamicInfo(short bootstrap_method_attr_index, short name_and_type_index){
-        this.bootstrap_method_attr_index = bootstrap_method_attr_index;
+    public FieldRefInfo(short class_index, short name_and_type_index) {
+        this.class_index = class_index;
         this.name_and_type_index = name_and_type_index;
     }
 }

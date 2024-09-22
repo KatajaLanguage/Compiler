@@ -2,7 +2,6 @@ private final class Test{
     int i
 }
 
-
 public interface ABC{}
 ##
 -t class 52 -d true -o out -c src/test/kataja/Test.ktj -q

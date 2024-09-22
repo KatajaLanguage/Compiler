@@ -14,15 +14,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package katajaLang.jvm.bytecode.constant;
+package katajaLang.jvm.constpool;
 
-public class FieldRefInfo implements ConstantInfo{
-    public static final short tag = 9;
-    public final short class_index;
-    public final short name_and_type_index;
+public class Utf8Info implements ConstantInfo{
+    public static final short tag = 1;
+    public final String value;
 
-    public FieldRefInfo(short class_index, short name_and_type_index) {
-        this.class_index = class_index;
-        this.name_and_type_index = name_and_type_index;
+    public Utf8Info(String value){
+        this.value = value;
     }
 }

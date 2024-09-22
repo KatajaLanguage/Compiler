@@ -18,7 +18,7 @@ package katajaLang.jvm.bytecode;
 
 import katajaLang.compiler.CompilerConfig;
 import katajaLang.compiler.CompilingException;
-import katajaLang.jvm.bytecode.constant.*;
+import katajaLang.jvm.constpool.*;
 import katajaLang.model.Compilable;
 import katajaLang.model.Interface;
 import katajaLang.model.Modifier;

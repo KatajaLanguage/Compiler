@@ -14,15 +14,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package katajaLang.jvm.bytecode.constant;
+package katajaLang.jvm.constpool;
 
-public class InterfaceMethodRefInfo implements ConstantInfo{
-    public static final short tag = 11;
-    public final short class_index;
-    public final short name_and_type_index;
+public class NameAndTypeInfo implements ConstantInfo{
+    public static final short tag = 10;
+    public final short name_index;
+    public final short descriptor_index;
 
-    public InterfaceMethodRefInfo(short class_index, short name_and_type_index) {
-        this.class_index = class_index;
-        this.name_and_type_index = name_and_type_index;
+    public NameAndTypeInfo(short name_index, short descriptor_index){
+        this.name_index = name_index;
+        this.descriptor_index = descriptor_index;
     }
 }
