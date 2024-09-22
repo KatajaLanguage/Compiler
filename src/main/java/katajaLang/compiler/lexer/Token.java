@@ -36,4 +36,9 @@ public final class Token {
     public boolean equals(String string){
         return value.equals(string);
     }
+
+    @Override
+    public String toString() {
+        return value;
+    }
 }

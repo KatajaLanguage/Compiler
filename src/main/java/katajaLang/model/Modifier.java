@@ -34,4 +34,8 @@ public class Modifier {
     public boolean isInvalidForInterface(){
         return acc == AccessFlag.PROTECTED || finaly;
     }
+
+    public boolean isInvalidForField(){
+        return finaly || abstrakt;
+    }
 }

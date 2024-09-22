@@ -16,13 +16,13 @@
 
 package katajaLang.model;
 
-import java.util.HashMap;
+public final class Field {
 
-public class Class extends Compilable{
+    public final Modifier mod;
+    public final Type type;
 
-    public final HashMap<String, Field> fields = new HashMap<>();
-
-    public Class(Modifier mod){
-        super(mod);
+    public Field(Modifier mod, Type type){
+        this.mod = mod;
+        this.type = type;
     }
 }

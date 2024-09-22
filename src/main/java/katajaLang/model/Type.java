@@ -16,13 +16,29 @@
 
 package katajaLang.model;
 
-import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
-public class Class extends Compilable{
+public final class Type {
 
-    public final HashMap<String, Field> fields = new HashMap<>();
+    public final static Set<String> PRIMITIVES = new HashSet<>();
 
-    public Class(Modifier mod){
-        super(mod);
+    static{
+        PRIMITIVES.add("int");
+        PRIMITIVES.add("short");
+        PRIMITIVES.add("long");
+        PRIMITIVES.add("double");
+        PRIMITIVES.add("float");
+        PRIMITIVES.add("char");
+        PRIMITIVES.add("byte");
+        PRIMITIVES.add("boolean");
+    }
+
+    public final String clazz;
+    public final boolean primitive;
+
+    public Type(String clazz){
+        this.clazz = clazz;
+        this.primitive = PRIMITIVES.contains(clazz);
     }
 }

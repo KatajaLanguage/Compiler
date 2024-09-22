@@ -31,6 +31,7 @@ public final class Parser {
 
     private HashMap<String, Compilable> classes;
     private TokenHandler th;
+    private Compilable current;
     private String path;
     private String name;
 
@@ -41,6 +42,7 @@ public final class Parser {
     public HashMap<String, Compilable> parseFile(File file, String folder) throws FileNotFoundException {
         th = lexer.lexFile(file);
         classes = new HashMap<>();
+        current = null;
 
         if(0 < file.getPath().length() - file.getName().length() - 1) path = file.getPath().substring(0, file.getPath().length() - file.getName().length() - 1);
         else path = "";
@@ -93,7 +95,8 @@ public final class Parser {
                 parseInterface(mod);
                 break;
             default:
-                err("Illegal argument '"+th.current().value+"'");
+                parseField(mod);
+                break;
         }
     }
 
@@ -103,9 +106,18 @@ public final class Parser {
         if(mod.isInvalidForClass()) err("Illegal Modifier for class "+name);
 
         th.assertToken("{");
-        th.assertToken("}");
 
-        if(!classes.containsKey(name)) classes.put(name, new Class(mod));
+        Class clazz = new Class(mod);
+        current = clazz;
+
+        while(!th.isNext("}")){
+            parseMod();
+        }
+
+        current = null;
+        th.assertEndOfStatement();
+
+        if(!classes.containsKey(name)) classes.put(name, clazz);
         else throw new ParsingException("Class "+name+" is already defined");
     }
 
@@ -116,6 +128,7 @@ public final class Parser {
 
         th.assertToken("{");
         th.assertToken("}");
+        th.assertEndOfStatement();
 
         if(!classes.containsKey(name)) classes.put(name, new Interface(mod));
         else throw new ParsingException("Class "+name+" is already defined");
@@ -123,6 +136,30 @@ public final class Parser {
 
     private String parseName(){
         return (path.isEmpty() ? "" : path+"/")+this.name+"/"+th.assertToken(TokenType.IDENTIFIER).value;
+    }
+
+    private void parseField(Modifier mod){
+        Type type = parseType();
+        String name = th.assertToken(TokenType.IDENTIFIER).value;
+        th.assertEndOfStatement();
+
+        if(mod.isInvalidForField()) err("Illegal Modifier for field "+name);
+
+        Field field = new Field(mod, type);
+
+        if(current == null){
+            err("field "+name+" must be in a class");
+        }else{
+            if(current instanceof Class){
+                if(((Class) current).fields.containsKey(name)) err("field "+name+" is already defined");
+
+                ((Class) current).fields.put(name, field);
+            }else err("field "+name+" must be in a class");
+        }
+    }
+
+    private Type parseType(){
+        return null;
     }
 
     private void err(String message) throws ParsingException{
