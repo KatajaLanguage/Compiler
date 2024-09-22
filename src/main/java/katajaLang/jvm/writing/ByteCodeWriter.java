@@ -14,14 +14,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package katajaLang.jvm.bytecode;
+package katajaLang.jvm.writing;
 
 import katajaLang.compiler.CompilerConfig;
 import katajaLang.compiler.CompilingException;
 import katajaLang.jvm.constpool.*;
-import katajaLang.model.Compilable;
-import katajaLang.model.Interface;
-import katajaLang.model.Modifier;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -29,22 +26,18 @@ import java.io.OutputStream;
 /**
  * Class to write java bytecode
  */
-public final class ByteCodeWriter {
-    public static final int magic = 0xCAFEBABE;
+final class ByteCodeWriter {
+    static final int magic = 0xCAFEBABE;
 
     private OutputStream stream;
-    private Compilable clazz;
+    private JVMWritableClass clazz;
 
-    public ByteCodeWriter(){
-
-    }
-
-    public void writeClass(OutputStream stream, Compilable clazz, String className) throws IOException, CompilingException {
+    void writeClass(OutputStream stream, JVMWritableClass clazz) throws IOException, CompilingException {
         this.stream = stream;
         this.clazz = clazz;
 
         writeVersion();
-        writeConstPool(className);
+        writeConstPool();
         writeClassInfo();
         writeInterfaces();
         writeFields();
@@ -52,7 +45,7 @@ public final class ByteCodeWriter {
         writeAttributes();
     }
 
-    private void writeVersion() throws IOException {
+    void writeVersion() throws IOException {
         write4(magic);
         write2(0);
         switch(CompilerConfig.targetType){
@@ -71,14 +64,27 @@ public final class ByteCodeWriter {
         }
     }
 
-    private void writeConstPool(String className) throws IOException {
-        write2(5);
-        write(7);
-        write2(3);
-        write(7);
-        write2(4);
-        writeUtf8(new Utf8Info(className));
-        writeUtf8(new Utf8Info("java/lang/Object"));
+    private void writeConstPool() throws IOException {
+        write2(clazz.getConstPoolSize());
+        for(ConstantInfo constInfo: clazz.getConstPool()){
+            if(constInfo instanceof Utf8Info) writeUtf8((Utf8Info) constInfo);
+            else if(constInfo instanceof ClassInfo) writeClass((ClassInfo) constInfo);
+            else if(constInfo instanceof FieldRefInfo) writeFieldRef((FieldRefInfo) constInfo);
+            else if(constInfo instanceof MethodRefInfo) writeMethodRef((MethodRefInfo) constInfo);
+            else if(constInfo instanceof InterfaceMethodRefInfo) writeInterfaceMethodRef((InterfaceMethodRefInfo) constInfo);
+            else if(constInfo instanceof StringInfo) writeString((StringInfo) constInfo);
+            else if(constInfo instanceof IntegerInfo) writeInteger((IntegerInfo) constInfo);
+            else if(constInfo instanceof FloatInfo) writeFloat((FloatInfo) constInfo);
+            else if(constInfo instanceof DoubleInfo) writeDouble((DoubleInfo) constInfo);
+            else if(constInfo instanceof LongInfo) writeLong((LongInfo) constInfo);
+            else if(constInfo instanceof NameAndTypeInfo) writeNameAndType((NameAndTypeInfo) constInfo);
+            else if(constInfo instanceof MethodHandleInfo) writeMethodHandle((MethodHandleInfo) constInfo);
+            else if(constInfo instanceof MethodTypeInfo) writeMethodType((MethodTypeInfo) constInfo);
+            else if(constInfo instanceof DynamicInfo) writeDynamic((DynamicInfo) constInfo);
+            else if(constInfo instanceof InvokeDynamicInfo) writeInvokeDynamic((InvokeDynamicInfo) constInfo);
+            else if(constInfo instanceof PackageInfo) writePackage((PackageInfo) constInfo);
+            else if(constInfo instanceof ModuleInfo) writeModule((ModuleInfo) constInfo);
+        }
     }
 
     private void writeUtf8(Utf8Info info) throws IOException {
@@ -175,7 +181,7 @@ public final class ByteCodeWriter {
     }
 
     private void writeClassInfo() throws IOException {
-        write2(getFlag(clazz.mod) + (clazz instanceof Interface ? Flag.INTERFACE : 0));
+        write2(clazz.getAccessFlag());
         write2(1);
         write2(2);
     }
@@ -194,27 +200,6 @@ public final class ByteCodeWriter {
 
     private void writeAttributes() throws IOException {
         write2(0);
-    }
-
-    private int getFlag(Modifier mod){
-        int acc = 0;
-
-        switch(mod.acc){
-            case PUBLIC:
-                acc += Flag.PUBLIC;
-                break;
-            case PRIVATE:
-                acc += Flag.PRIVATE;
-                break;
-            case PROTECTED:
-                acc += Flag.PROTECTED;
-                break;
-        }
-
-        if(mod.abstrakt) acc += Flag.ABSTRACT;
-        if(mod.finaly) acc += Flag.FINAL;
-
-        return acc;
     }
 
     private void write8(long i) throws IOException {

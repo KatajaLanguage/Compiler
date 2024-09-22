@@ -14,7 +14,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package katajaLang.jvm.bytecode;
+package katajaLang.jvm.writing;
 
 import katajaLang.compiler.CompilerConfig;
 import katajaLang.compiler.CompilingException;
@@ -54,7 +54,7 @@ public class JarWriter {
      */
     public void writeClass(Compilable clazz, String className) throws IOException, CompilingException {
         stream.putNextEntry(new JarEntry(className+".class"));
-        writer.writeClass(stream, clazz, className);
+        writer.writeClass(stream, JVMClassBuilder.buildWritableClass(clazz, className));
         stream.closeEntry();
     }
 

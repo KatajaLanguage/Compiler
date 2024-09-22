@@ -14,7 +14,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package katajaLang.jvm.bytecode;
+package katajaLang.jvm.writing;
 
 import katajaLang.compiler.CompilerConfig;
 import katajaLang.compiler.CompilingException;
@@ -40,7 +40,7 @@ public final class ClassWriter {
      */
     public void writeClass(Compilable clazz, String className) throws IOException, CompilingException {
         FileOutputStream stream = createFile(className);
-        writer.writeClass(stream, clazz, className);
+        writer.writeClass(stream, JVMClassBuilder.buildWritableClass(clazz, className));
         stream.flush();
         stream.close();
     }

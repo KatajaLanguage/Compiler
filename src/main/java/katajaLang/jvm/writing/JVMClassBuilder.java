@@ -14,7 +14,16 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package katajaLang.jvm.constpool;
+package katajaLang.jvm.writing;
 
-public class ConstPool {
+import katajaLang.model.Compilable;
+import katajaLang.model.Interface;
+
+final class JVMClassBuilder {
+
+    static JVMWritableClass buildWritableClass(Compilable compilable, String clazzName){
+        JVMWritableClass clazz = new JVMWritableClass(compilable.mod, clazzName, compilable instanceof Interface);
+
+        return clazz;
+    }
 }

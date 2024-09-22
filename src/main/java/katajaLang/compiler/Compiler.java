@@ -17,9 +17,8 @@
 package katajaLang.compiler;
 
 import katajaLang.compiler.parsing.Parser;
-import katajaLang.jvm.bytecode.ByteCodeWriter;
-import katajaLang.jvm.bytecode.ClassWriter;
-import katajaLang.jvm.bytecode.JarWriter;
+import katajaLang.jvm.writing.ClassWriter;
+import katajaLang.jvm.writing.JarWriter;
 import katajaLang.model.Compilable;
 import sun.security.pkcs.ParsingException;
 
