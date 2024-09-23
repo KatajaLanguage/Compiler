@@ -17,7 +17,6 @@
 package katajaLang.jvm.constpool;
 
 import java.util.ArrayList;
-import java.util.Optional;
 
 public final class ConstPool {
 
@@ -29,17 +28,11 @@ public final class ConstPool {
     }
 
     public int addClassInfo(String clazz){
-        Optional<Utf8Info> optional = entries.stream().filter(Utf8Info.class::isInstance).map(Utf8Info.class::cast).filter(obj -> obj.value.equals(clazz)).findFirst();
-        int name_index;
+        return entries.stream().filter(ClassInfo.class::isInstance).map(ClassInfo.class::cast).filter(obj -> ((Utf8Info)entries.get(obj.name_index - 1)).value.equals(clazz)).findFirst().map(entries::indexOf).orElseGet(() -> add(new ClassInfo((short) addUtf8Info(clazz))));
+    }
 
-        if(optional.isPresent()) name_index = entries.indexOf(optional.get());
-        else{
-            entries.add(new Utf8Info(clazz));
-            name_index = entries.size();
-        }
-
-        entries.add(new ClassInfo((short) name_index));
-        return entries.size();
+    public int addUtf8Info(String string){
+        return entries.stream().filter(Utf8Info.class::isInstance).map(Utf8Info.class::cast).filter(obj -> obj.value.equals(string)).findFirst().map(entries::indexOf).orElseGet(() -> add(new Utf8Info(string)));
     }
 
     public ConstantInfo[] getEntries(){

@@ -17,9 +17,7 @@
 package katajaLang.jvm.writing;
 
 import katajaLang.jvm.bytecode.Flag;
-import katajaLang.jvm.constpool.ClassInfo;
 import katajaLang.jvm.constpool.ConstPool;
-import katajaLang.jvm.constpool.Utf8Info;
 import katajaLang.model.Modifier;
 
 final class JVMWritableClass {
