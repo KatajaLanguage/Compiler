@@ -27,6 +27,29 @@ public final class ConstPool {
         return entries.size();
     }
 
+    public int addTypeDescriptor(String type){
+        switch(type){
+            case "byte":
+                return addUtf8Info("B");
+            case "char":
+                return addUtf8Info("C");
+            case "int":
+                return addUtf8Info("I");
+            case "double":
+                return addUtf8Info("D");
+            case "float":
+                return addUtf8Info("F");
+            case "long":
+                return addUtf8Info("J");
+            case "short":
+                return addUtf8Info("S");
+            case "boolean":
+                return addUtf8Info("Z");
+        }
+
+        return -1;
+    }
+
     public int addClassInfo(String clazz){
         return entries.stream().filter(ClassInfo.class::isInstance).map(ClassInfo.class::cast).filter(obj -> ((Utf8Info)entries.get(obj.name_index - 1)).value.equals(clazz)).findFirst().map(entries::indexOf).orElseGet(() -> add(new ClassInfo((short) addUtf8Info(clazz))));
     }

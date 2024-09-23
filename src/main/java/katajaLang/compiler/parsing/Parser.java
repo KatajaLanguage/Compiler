@@ -95,6 +95,7 @@ public final class Parser {
                 parseInterface(mod);
                 break;
             default:
+                th.last();
                 parseField(mod);
                 break;
         }
@@ -159,7 +160,11 @@ public final class Parser {
     }
 
     private Type parseType(){
-        return null;
+        String type = th.assertToken(TokenType.IDENTIFIER).value;
+
+        if(!Type.PRIMITIVES.contains(type)) err("Unknown type "+type);
+
+        return new Type(type);
     }
 
     private void err(String message) throws ParsingException{

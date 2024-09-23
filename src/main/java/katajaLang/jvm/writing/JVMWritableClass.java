@@ -18,9 +18,15 @@ package katajaLang.jvm.writing;
 
 import katajaLang.jvm.bytecode.Flag;
 import katajaLang.jvm.constpool.ConstPool;
+import katajaLang.jvm.infos.FieldInfo;
+import katajaLang.model.Field;
 import katajaLang.model.Modifier;
 
+import java.util.ArrayList;
+
 final class JVMWritableClass {
+
+    private final ArrayList<FieldInfo> fields = new ArrayList<>();
 
     private final Modifier mod;
     private final ConstPool constPool;
@@ -39,29 +45,23 @@ final class JVMWritableClass {
         super_class = constPool.addClassInfo("java/lang/Object");
     }
 
-    int getAccessFlag(){
-        int acc = 0;
+    void addField(String name, Field field){
+        fields.add(new FieldInfo(Flag.getAccessFlag(field.mod), constPool.addUtf8Info(name), constPool.addTypeDescriptor(field.type.clazz)));
+    }
 
-        switch(mod.acc){
-            case PUBLIC:
-                acc += Flag.PUBLIC;
-                break;
-            case PRIVATE:
-                acc += Flag.PRIVATE;
-                break;
-            case PROTECTED:
-                acc += Flag.PROTECTED;
-                break;
-        }
+    int getAccessFlag(){
+        int acc = Flag.getAccessFlag(mod);
 
         if(isInterface) acc += Flag.INTERFACE;
-        if(mod.abstrakt) acc += Flag.ABSTRACT;
-        if(mod.finaly) acc += Flag.FINAL;
 
         return acc;
     }
 
     ConstPool getConstPool(){
         return constPool;
+    }
+
+    FieldInfo[] getFields(){
+        return fields.toArray(new FieldInfo[0]);
     }
 }

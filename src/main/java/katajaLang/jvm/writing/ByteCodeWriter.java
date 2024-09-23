@@ -19,6 +19,7 @@ package katajaLang.jvm.writing;
 import katajaLang.compiler.CompilerConfig;
 import katajaLang.compiler.CompilingException;
 import katajaLang.jvm.constpool.*;
+import katajaLang.jvm.infos.FieldInfo;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -192,7 +193,15 @@ final class ByteCodeWriter {
     }
 
     private void writeFields() throws IOException {
-        write2(0);
+        FieldInfo[] fields = clazz.getFields();
+        write2(fields.length);
+
+        for(FieldInfo fInfo:fields){
+            write2(fInfo.access_flag);
+            write2(fInfo.name_index);
+            write2(fInfo.descriptor_index);
+            write2(0);
+        }
     }
 
     private void writeMethods() throws IOException {

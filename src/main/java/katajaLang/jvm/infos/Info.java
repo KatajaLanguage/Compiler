@@ -14,21 +14,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package katajaLang.jvm.writing;
+package katajaLang.jvm.infos;
 
-import katajaLang.model.Class;
-import katajaLang.model.Compilable;
-import katajaLang.model.Interface;
-
-final class JVMClassBuilder {
-
-    static JVMWritableClass buildWritableClass(Compilable compilable, String clazzName){
-        JVMWritableClass clazz = new JVMWritableClass(compilable.mod, clazzName, compilable instanceof Interface);
-
-        if(compilable instanceof Class){
-            for(String fieldName:((Class) compilable).fields.keySet()) clazz.addField(fieldName, ((Class) compilable).fields.get(fieldName));
-        }
-
-        return clazz;
-    }
+public interface Info {
 }
