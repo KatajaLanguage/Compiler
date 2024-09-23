@@ -18,27 +18,27 @@ package katajaLang.jvm.writing;
 
 import katajaLang.jvm.bytecode.Flag;
 import katajaLang.jvm.constpool.ClassInfo;
-import katajaLang.jvm.constpool.ConstantInfo;
+import katajaLang.jvm.constpool.ConstPool;
 import katajaLang.jvm.constpool.Utf8Info;
 import katajaLang.model.Modifier;
-
-import java.util.ArrayList;
 
 final class JVMWritableClass {
 
     private final Modifier mod;
-    private final ArrayList<ConstantInfo> constPool;
+    private final ConstPool constPool;
     private final boolean isInterface;
+
+    public final int this_class;
+    public final int super_class;
 
     JVMWritableClass(Modifier mod, String name, boolean isInterface){
         this.mod = mod;
         this.isInterface = isInterface;
 
-        constPool = new ArrayList<>();
-        constPool.add(new ClassInfo((short) 3));
-        constPool.add(new ClassInfo((short) 4));
-        constPool.add(new Utf8Info(name));
-        constPool.add(new Utf8Info("java/lang/Object"));
+        constPool = new ConstPool();
+
+        this_class = constPool.addClassInfo(name);
+        super_class = constPool.addClassInfo("java/lang/Object");
     }
 
     int getAccessFlag(){
@@ -63,11 +63,7 @@ final class JVMWritableClass {
         return acc;
     }
 
-    int getConstPoolSize(){
-        return constPool.size() + 1;
-    }
-
-    ConstantInfo[] getConstPool(){
-        return constPool.toArray(new ConstantInfo[0]);
+    ConstPool getConstPool(){
+        return constPool;
     }
 }

@@ -65,8 +65,9 @@ final class ByteCodeWriter {
     }
 
     private void writeConstPool() throws IOException {
-        write2(clazz.getConstPoolSize());
-        for(ConstantInfo constInfo: clazz.getConstPool()){
+        ConstPool cp = clazz.getConstPool();
+        write2(cp.getSize());
+        for(ConstantInfo constInfo: cp.getEntries()){
             if(constInfo instanceof Utf8Info) writeUtf8((Utf8Info) constInfo);
             else if(constInfo instanceof ClassInfo) writeClass((ClassInfo) constInfo);
             else if(constInfo instanceof FieldRefInfo) writeFieldRef((FieldRefInfo) constInfo);
@@ -182,8 +183,8 @@ final class ByteCodeWriter {
 
     private void writeClassInfo() throws IOException {
         write2(clazz.getAccessFlag());
-        write2(1);
-        write2(2);
+        write2(clazz.this_class);
+        write2(clazz.super_class);
     }
 
     private void writeInterfaces() throws IOException {
