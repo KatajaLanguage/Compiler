@@ -18,9 +18,11 @@ package katajaLang.model;
 
 public abstract class Compilable {
 
+    public final Uses uses;
     public final Modifier mod;
 
-    public Compilable(Modifier mod){
+    public Compilable(Uses uses, Modifier mod){
+        this.uses = uses;
         this.mod = mod;
     }
 }

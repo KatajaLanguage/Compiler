@@ -18,7 +18,7 @@ package katajaLang.model;
 
 public class Interface extends Compilable{
 
-    public Interface(Modifier mod){
-        super(mod);
+    public Interface(Uses uses, Modifier mod){
+        super(uses, mod);
     }
 }

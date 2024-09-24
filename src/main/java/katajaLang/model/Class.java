@@ -22,7 +22,7 @@ public class Class extends Compilable{
 
     public final HashMap<String, Field> fields = new HashMap<>();
 
-    public Class(Modifier mod){
-        super(mod);
+    public Class(Uses uses, Modifier mod){
+        super(uses, mod);
     }
 }

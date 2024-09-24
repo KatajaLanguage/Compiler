@@ -34,6 +34,7 @@ public final class Parser {
     private Compilable current;
     private String path;
     private String name;
+    private Uses uses;
 
     public Parser(){
         lexer = new Lexer();
@@ -43,6 +44,7 @@ public final class Parser {
         th = lexer.lexFile(file);
         classes = new HashMap<>();
         current = null;
+        uses = new Uses();
 
         if(0 < file.getPath().length() - file.getName().length() - 1) path = file.getPath().substring(0, file.getPath().length() - file.getName().length() - 1);
         else path = "";
@@ -51,10 +53,29 @@ public final class Parser {
         name = file.getName().substring(0, file.getName().length() - 4);
 
         while (th.hasNext()){
-            parseMod();
+            if(th.isNext("use")) parseUse();
+            else parseMod();
         }
 
         return classes;
+    }
+
+    private void parseUse(){
+        boolean statik = th.isNext("$");
+        StringBuilder sb = new StringBuilder(th.assertToken(TokenType.IDENTIFIER).value);
+        while (th.isNext("/")) sb.append("/").append(th.assertToken(TokenType.IDENTIFIER).value);
+
+        String alias;
+
+        if(th.isNext("as")) alias = th.assertToken(TokenType.IDENTIFIER).value;
+        else alias = sb.toString().split("/")[sb.toString().split("/").length - 1];
+
+        if(uses.containsAlias(alias)) err(alias+" is already defined");
+
+        if(statik) uses.addStatic(alias, sb.toString());
+        else uses.addUse(alias, sb.toString());
+
+        th.assertEndOfStatement();
     }
 
     private void parseMod(){
@@ -108,7 +129,7 @@ public final class Parser {
 
         th.assertToken("{");
 
-        Class clazz = new Class(mod);
+        Class clazz = new Class(uses, mod);
         current = clazz;
 
         while(!th.isNext("}")){
@@ -131,7 +152,7 @@ public final class Parser {
         th.assertToken("}");
         th.assertEndOfStatement();
 
-        if(!classes.containsKey(name)) classes.put(name, new Interface(mod));
+        if(!classes.containsKey(name)) classes.put(name, new Interface(uses, mod));
         else throw new ParsingException("Class "+name+" is already defined");
     }
 
@@ -162,7 +183,7 @@ public final class Parser {
     private Type parseType(){
         String type = th.assertToken(TokenType.IDENTIFIER).value;
 
-        if(!Type.PRIMITIVES.contains(type)) err("Unknown type "+type);
+
 
         return new Type(type);
     }
