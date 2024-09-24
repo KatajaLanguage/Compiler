@@ -1,5 +1,5 @@
 private final class Test{
-    public int i
+    public int[] i
 }
 
 public interface ABC{}

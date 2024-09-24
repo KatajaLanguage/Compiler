@@ -16,6 +16,11 @@
 
 package katajaLang.jvm.constpool;
 
+import katajaLang.model.type.ArrayType;
+import katajaLang.model.type.ComplexType;
+import katajaLang.model.type.DataType;
+import katajaLang.model.type.PrimitiveType;
+
 import java.util.ArrayList;
 
 public final class ConstPool {
@@ -27,27 +32,27 @@ public final class ConstPool {
         return entries.size();
     }
 
-    public int addTypeDescriptor(String type){
-        switch(type){
-            case "byte":
-                return addUtf8Info("B");
-            case "char":
-                return addUtf8Info("C");
-            case "int":
-                return addUtf8Info("I");
-            case "double":
-                return addUtf8Info("D");
-            case "float":
-                return addUtf8Info("F");
-            case "long":
-                return addUtf8Info("J");
-            case "short":
-                return addUtf8Info("S");
-            case "boolean":
-                return addUtf8Info("Z");
+    public int addTypeDescriptor(DataType type){
+        StringBuilder desc = new StringBuilder();
+
+        while(type instanceof ArrayType){
+            desc.append("[");
+            type = ((ArrayType) type).type;
         }
 
-        return -1;
+        if(type instanceof ComplexType) desc.append("L").append(((ComplexType) type).type).append(";");
+        else if(type instanceof PrimitiveType){
+            if(type.equals(PrimitiveType.BYTE)) desc.append("B");
+            else if(type.equals(PrimitiveType.CHAR)) desc.append("C");
+            else if(type.equals(PrimitiveType.INT)) desc.append("I");
+            else if(type.equals(PrimitiveType.DOUBLE)) desc.append("D");
+            else if(type.equals(PrimitiveType.FLOAT)) desc.append("F");
+            else if(type.equals(PrimitiveType.LONG)) desc.append("J");
+            else if(type.equals(PrimitiveType.SHORT)) desc.append("S");
+            else if(type.equals(PrimitiveType.BOOLEAN)) desc.append("Z");
+        }
+
+        return addUtf8Info(desc.toString());
     }
 
     public int addClassInfo(String clazz){

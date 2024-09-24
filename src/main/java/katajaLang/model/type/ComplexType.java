@@ -14,17 +14,18 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package katajaLang.model;
+package katajaLang.model.type;
 
-import katajaLang.model.type.DataType;
+public class ComplexType extends DataType{
 
-public final class Field {
+    public final String type;
 
-    public final Modifier mod;
-    public final DataType type;
-
-    public Field(Modifier mod, DataType type){
-        this.mod = mod;
+    public ComplexType(String type){
         this.type = type;
+    }
+
+    @Override
+    public boolean equals(DataType type) {
+        return type instanceof ComplexType && ((ComplexType) type).type.equals(this.type);
     }
 }

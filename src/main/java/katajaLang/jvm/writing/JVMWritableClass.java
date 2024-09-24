@@ -46,7 +46,7 @@ final class JVMWritableClass {
     }
 
     void addField(String name, Field field){
-        fields.add(new FieldInfo(Flag.getAccessFlag(field.mod), constPool.addUtf8Info(name), constPool.addTypeDescriptor(field.type.clazz)));
+        fields.add(new FieldInfo(Flag.getAccessFlag(field.mod), constPool.addUtf8Info(name), constPool.addTypeDescriptor(field.type)));
     }
 
     int getAccessFlag(){

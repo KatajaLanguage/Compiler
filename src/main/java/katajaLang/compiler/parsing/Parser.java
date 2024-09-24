@@ -20,6 +20,9 @@ import katajaLang.compiler.lexer.Lexer;
 import katajaLang.compiler.lexer.TokenType;
 import katajaLang.model.*;
 import katajaLang.model.Class;
+import katajaLang.model.type.ArrayType;
+import katajaLang.model.type.DataType;
+import katajaLang.model.type.PrimitiveType;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -161,7 +164,7 @@ public final class Parser {
     }
 
     private void parseField(Modifier mod){
-        Type type = parseType();
+        DataType type = parseType();
         String name = th.assertToken(TokenType.IDENTIFIER).value;
         th.assertEndOfStatement();
 
@@ -180,12 +183,20 @@ public final class Parser {
         }
     }
 
-    private Type parseType(){
-        String type = th.assertToken(TokenType.IDENTIFIER).value;
+    private DataType parseType(){
+        th.assertToken(TokenType.IDENTIFIER);
 
+        DataType type = null;
 
+        if(PrimitiveType.PRIMITIVES.contains(th.current().value)) type = PrimitiveType.ofString(th.current().value);
+        else err("illegal type");
 
-        return new Type(type);
+        while(th.isNext("[")){
+            th.assertToken("]");
+            type = new ArrayType(type);
+        }
+
+        return type;
     }
 
     private void err(String message) throws ParsingException{

@@ -14,17 +14,18 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package katajaLang.model;
+package katajaLang.model.type;
 
-import katajaLang.model.type.DataType;
+public class ArrayType extends DataType {
 
-public final class Field {
-
-    public final Modifier mod;
     public final DataType type;
 
-    public Field(Modifier mod, DataType type){
-        this.mod = mod;
+    public ArrayType(DataType type){
         this.type = type;
+    }
+
+    @Override
+    public boolean equals(DataType type) {
+        return type instanceof ArrayType && ((ArrayType) type).type.equals(this.type);
     }
 }
