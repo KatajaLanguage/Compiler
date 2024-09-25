@@ -4,6 +4,5 @@ private final class Test{
     public String[] i
 }
 
-public interface ABC{}
 ##
--t class 52 -d true -o out -c src/test/kataja/Test.ktj -q
+-t class 52 -d true -o out true -c src/test/kataja/Test.ktj -q

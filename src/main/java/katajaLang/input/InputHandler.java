@@ -83,6 +83,12 @@ public final class InputHandler {
                 case "-c":
                     compile();
                     break;
+                case "-l":
+                    addLib();
+                    break;
+                case "-lr":
+                    removeLib();
+                    break;
                 default:
                     System.err.println("Unknown Command '"+arg+"', run '-h' for a list of all valid commands");
                     break;
@@ -127,6 +133,17 @@ public final class InputHandler {
             }catch (InvalidPathException ignored){
                 System.err.println("Expected filepath got '"+path+"'");
             }
+
+            if(argHandler.hasNextParameter()){
+                String value = argHandler.advance().argument;
+
+                if(value.equals("true"))
+                    CompilerConfig.clearOut = true;
+                else if(value.equals("false"))
+                    CompilerConfig.clearOut = false;
+                else
+                    System.err.println("Expected boolean value, got '"+value+"'");
+            }
         }else System.err.println("Expected boolean Value for output option");
     }
 
@@ -136,12 +153,14 @@ public final class InputHandler {
         System.out.println("Available target types:");
         System.out.println("class\nclass 52\nclass 55\nclass 61\njar\njar 52\njar 55\njar 61");
         System.out.println("\nAvailable commands:");
-        System.out.println("-c <string...> : compiles the given files/folder");
-        System.out.println("-d <boolean>   : enable debug");
-        System.out.println("-h             : print help");
-        System.out.println("-o <string>    : set out put folder");
-        System.out.println("-q             : quit Compiler");
-        System.out.println("-t <string>    : set target type");
+        System.out.println("-c <string...>      : compiles the given files/folder");
+        System.out.println("-d <boolean>        : enable debug");
+        System.out.println("-h                  : print help");
+        System.out.println("-l <string...>      : adds the given libraries");
+        System.out.println("-lr <string...>     : removes the given libraries");
+        System.out.println("-o <string> <bool>? : set output folder and delete before write");
+        System.out.println("-q                  : quit Compiler");
+        System.out.println("-t <string>         : set target type");
         System.out.println();
         System.out.println("<---------------------------------->");
     }
@@ -163,5 +182,15 @@ public final class InputHandler {
                 Thread.sleep(200);
             }catch(InterruptedException ignored){}
         }
+    }
+
+    private void addLib(){
+        if(argHandler.hasNextParameter()) while(argHandler.hasNextParameter()) CompilerConfig.addLib(argHandler.advance().argument);
+        else System.err.println("Expected library path");
+    }
+
+    private void removeLib(){
+        if(argHandler.hasNextParameter()) while(argHandler.hasNextParameter()) CompilerConfig.libs.remove(argHandler.advance().argument);
+        else System.err.println("Expected library path");
     }
 }

@@ -25,6 +25,7 @@ import sun.security.pkcs.ParsingException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.time.Duration;
 import java.util.HashMap;
 
 public final class Compiler {
@@ -55,6 +56,8 @@ public final class Compiler {
 
         for(Compilable compilable: classes.values()) compilable.validateTypes();
 
+        if(CompilerConfig.clearOut && CompilerConfig.outFolder != null) deleteFolder(CompilerConfig.outFolder.toFile(), true);
+
         switch(CompilerConfig.targetType){
             case Class52:
                 ClassWriter cw = new ClassWriter();
@@ -65,6 +68,38 @@ public final class Compiler {
                 for(String name: classes.keySet()) jw.writeClass(classes.get(name), name);
                 jw.close();
                 break;
+            default:
+                throw new CompilingException("No target type defined");
+        }
+
+        if(CompilerConfig.debug){
+            System.out.print("\nCompiling finished successfully in");
+
+            Duration duration = Duration.ofNanos(System.nanoTime() - startTime);
+
+            startTime = duration.toMinutes();
+            if(startTime > 0){
+                System.out.print(" "+startTime+" minutes");
+                duration = duration.minusMinutes(startTime);
+            }
+
+            startTime = duration.getSeconds();
+            if(startTime > 0){
+                System.out.print(" "+startTime+" seconds");
+                duration = duration.minusSeconds(startTime);
+            }
+
+            startTime = duration.toMillis();
+            if(startTime > 0){
+                System.out.print(" "+startTime);
+                duration = duration.minusMillis(startTime);
+                System.out.print(","+String.valueOf(duration.getNano()).replaceAll("0+$", "")+" milliseconds");
+            }else{
+                startTime = duration.toNanos();
+                if(startTime > 0) System.out.print(" "+startTime+" nanoseconds");
+            }
+
+            System.out.println();
         }
     }
 
@@ -81,6 +116,13 @@ public final class Compiler {
         for(String name: parsed.keySet()){
             if(classes.containsKey(name)) throw new ParsingException("Class "+name+" is already defined");
             else classes.put(name, parsed.get(name));
+        }
+    }
+
+    private void deleteFolder(File folder, boolean delete){
+        for(File file:folder.listFiles()){
+            if(file.isDirectory()) deleteFolder(file, true);
+            else if(!file.delete()) throw new RuntimeException("Failed to delete "+file.getPath());
         }
     }
 }

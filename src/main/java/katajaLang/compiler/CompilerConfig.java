@@ -16,7 +16,9 @@
 
 package katajaLang.compiler;
 
+import java.io.File;
 import java.nio.file.Path;
+import java.util.ArrayList;
 
 /**
  * Class for Compiler Configuration
@@ -81,7 +83,17 @@ public final class CompilerConfig {
         }
     }
 
+    public static ArrayList<String> libs = new ArrayList<>();
     public static TargetType targetType = null;
     public static Path outFolder = null;
+    public static boolean clearOut = false;
     public static boolean debug = false;
+
+    public static void addLib(String path){
+        if(!libs.contains(path)){
+            if(new File(path).exists()) System.err.println(path+" does not exist");
+            else if(!path.endsWith(".jar")) System.err.println("."+path.split("\\.")[path.split("\\.").length - 1]+" is not supported");
+            else libs.add(path);
+        }
+    }
 }
