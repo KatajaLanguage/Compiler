@@ -25,4 +25,9 @@ public class Class extends Compilable{
     public Class(Uses uses, Modifier mod){
         super(uses, mod);
     }
+
+    @Override
+    public void validateTypes() {
+        for(Field field: fields.values()) field.validateType();
+    }
 }

@@ -21,6 +21,7 @@ import katajaLang.compiler.lexer.TokenType;
 import katajaLang.model.*;
 import katajaLang.model.Class;
 import katajaLang.model.type.ArrayType;
+import katajaLang.model.type.ComplexType;
 import katajaLang.model.type.DataType;
 import katajaLang.model.type.PrimitiveType;
 
@@ -170,7 +171,7 @@ public final class Parser {
 
         if(mod.isInvalidForField()) err("Illegal Modifier for field "+name);
 
-        Field field = new Field(mod, type);
+        Field field = new Field(uses, mod, type);
 
         if(current == null){
             err("field "+name+" must be in a class");
@@ -186,10 +187,10 @@ public final class Parser {
     private DataType parseType(){
         th.assertToken(TokenType.IDENTIFIER);
 
-        DataType type = null;
+        DataType type;
 
         if(PrimitiveType.PRIMITIVES.contains(th.current().value)) type = PrimitiveType.ofString(th.current().value);
-        else err("illegal type");
+        else type = new ComplexType(th.current().value);
 
         while(th.isNext("[")){
             th.assertToken("]");

@@ -16,9 +16,14 @@
 
 package katajaLang.model;
 
-public class Interface extends Compilable{
+public final class Interface extends Compilable{
 
     public Interface(Uses uses, Modifier mod){
         super(uses, mod);
+    }
+
+    @Override
+    public void validateTypes() {
+
     }
 }

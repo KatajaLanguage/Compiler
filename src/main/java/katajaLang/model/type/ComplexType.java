@@ -18,7 +18,7 @@ package katajaLang.model.type;
 
 public class ComplexType extends DataType{
 
-    public final String type;
+    public String type;
 
     public ComplexType(String type){
         this.type = type;

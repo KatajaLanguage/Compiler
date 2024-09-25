@@ -25,4 +25,6 @@ public abstract class Compilable {
         this.uses = uses;
         this.mod = mod;
     }
+
+    public abstract void validateTypes();
 }

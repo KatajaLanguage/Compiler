@@ -1,5 +1,7 @@
+use java/lang/String
+
 private final class Test{
-    public int[] i
+    public String[] i
 }
 
 public interface ABC{}

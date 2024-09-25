@@ -16,7 +16,38 @@
 
 package katajaLang.model.type;
 
+import static katajaLang.model.type.PrimitiveType.*;
+
 public abstract class DataType {
 
     public abstract boolean equals(DataType type);
+
+    public DataType ignoreArray(){
+        if(this instanceof ArrayType) return ((ArrayType) this).type.ignoreArray();
+
+        return this;
+    }
+
+    public static DataType ofString(String type){
+        switch(type){
+            case "int":
+                return INT;
+            case "short":
+                return SHORT;
+            case "long":
+                return LONG;
+            case "float":
+                return FLOAT;
+            case "double":
+                return DOUBLE;
+            case "boolean":
+                return BOOLEAN;
+            case "char":
+                return CHAR;
+            case "byte":
+                return BYTE;
+            default:
+                return new ComplexType(type);
+        }
+    }
 }

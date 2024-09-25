@@ -16,15 +16,29 @@
 
 package katajaLang.model;
 
+import katajaLang.compiler.parsing.ParsingException;
+import katajaLang.model.type.ComplexType;
 import katajaLang.model.type.DataType;
 
 public final class Field {
 
+    public final Uses uses;
     public final Modifier mod;
     public final DataType type;
 
-    public Field(Modifier mod, DataType type){
+    public Field(Uses uses, Modifier mod, DataType type){
+        this.uses = uses;
         this.mod = mod;
         this.type = type;
+    }
+
+    public void validateType(){
+        DataType dataType = type.ignoreArray();
+
+        if(dataType instanceof ComplexType){
+            if(!uses.containsAlias(((ComplexType) dataType).type)) throw new ParsingException("Unknown Type "+((ComplexType) dataType).type);
+
+            ((ComplexType) dataType).type = uses.get(((ComplexType) dataType).type);
+        }
     }
 }

@@ -53,6 +53,8 @@ public final class Compiler {
             }
         }
 
+        for(Compilable compilable: classes.values()) compilable.validateTypes();
+
         switch(CompilerConfig.targetType){
             case Class52:
                 ClassWriter cw = new ClassWriter();

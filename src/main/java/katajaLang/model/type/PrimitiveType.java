@@ -46,27 +46,4 @@ public class PrimitiveType extends DataType{
     public boolean equals(DataType type) {
         return type == this;
     }
-
-    public static PrimitiveType ofString(String type){
-        switch(type){
-            case "int":
-                return INT;
-            case "short":
-                return SHORT;
-            case "long":
-                return LONG;
-            case "float":
-                return FLOAT;
-            case "double":
-                return DOUBLE;
-            case "boolean":
-                return BOOLEAN;
-            case "char":
-                return CHAR;
-            case "byte":
-                return BYTE;
-            default:
-                throw new IllegalArgumentException("Expected primitive type got "+type);
-        }
-    }
 }
