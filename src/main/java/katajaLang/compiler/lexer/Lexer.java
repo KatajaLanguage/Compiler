@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 Xaver Weste
+ * Copyright (C) ni271828mand
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License 3.0 as published by

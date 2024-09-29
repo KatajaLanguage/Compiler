@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 Xaver Weste
+ * Copyright (C) 2024 ni271828mand
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License 3.0 as published by
@@ -39,6 +39,8 @@ public final class Compiler {
     }
 
     public void compile(String...files) throws IOException {
+        if(CompilerConfig.targetType == null) throw new CompilingException("No target type defined");
+
         long startTime = System.nanoTime();
 
         for(String f:files){
@@ -60,16 +62,18 @@ public final class Compiler {
 
         switch(CompilerConfig.targetType){
             case Class52:
+            case Class55:
+            case Class61:
                 ClassWriter cw = new ClassWriter();
                 for(String name: classes.keySet()) cw.writeClass(classes.get(name), name);
                 break;
             case Jar52:
+            case Jar55:
+            case Jar61:
                 JarWriter jw = new JarWriter("Program");
                 for(String name: classes.keySet()) jw.writeClass(classes.get(name), name);
                 jw.close();
                 break;
-            default:
-                throw new CompilingException("No target type defined");
         }
 
         if(CompilerConfig.debug){
