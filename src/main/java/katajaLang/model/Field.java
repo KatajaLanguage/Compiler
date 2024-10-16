@@ -16,6 +16,7 @@
 
 package katajaLang.model;
 
+import katajaLang.compiler.Compiler;
 import katajaLang.compiler.parsing.ParsingException;
 import katajaLang.model.type.ComplexType;
 import katajaLang.model.type.DataType;
@@ -37,7 +38,8 @@ public final class Field {
 
         if(dataType instanceof ComplexType){
             if(!uses.containsAlias(((ComplexType) dataType).type)) throw new ParsingException("Unknown Type "+((ComplexType) dataType).type);
-
+            String clazz = uses.get(((ComplexType) dataType).type);
+            if(Compiler.getInstance().getClass(clazz) == null) throw new ParsingException("Class "+clazz+" does not exist");
             ((ComplexType) dataType).type = uses.get(((ComplexType) dataType).type);
         }
     }

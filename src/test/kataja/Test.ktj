@@ -5,4 +5,5 @@ private final class Test{
 }
 
 ##
+-t class 52 -d true -o out true -c src/test/kataja/Test.ktj -q
 -t class 52 -d true -o out true -l C:/Users/User/.jdks/corretto-1.8.0_412/jre/lib/rt.jar -c src/test/kataja/Test.ktj -q

@@ -166,7 +166,7 @@ public final class InputHandler {
     }
 
     private void compile(){
-        Compiler c = new Compiler();
+        Compiler c = Compiler.getNewInstance();
 
         ArrayList<String> paths = new ArrayList<>();
 

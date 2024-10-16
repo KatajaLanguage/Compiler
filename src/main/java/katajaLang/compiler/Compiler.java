@@ -17,6 +17,7 @@
 package katajaLang.compiler;
 
 import katajaLang.compiler.parsing.Parser;
+import katajaLang.jvm.JVMLibHandler;
 import katajaLang.jvm.writing.ClassWriter;
 import katajaLang.jvm.writing.JarWriter;
 import katajaLang.model.Compilable;
@@ -30,11 +31,15 @@ import java.util.HashMap;
 
 public final class Compiler {
 
+    private static Compiler INSTANCE = null;
+
     private final HashMap<String, Compilable> classes;
+    private final HashMap<String, Compilable> libClasses;
     private final Parser parser;
 
-    public Compiler(){
+    private Compiler(){
         classes = new HashMap<>();
+        libClasses = new HashMap<>();
         parser = new Parser();
     }
 
@@ -128,5 +133,33 @@ public final class Compiler {
             if(file.isDirectory()) deleteFolder(file, true);
             else if(!file.delete()) throw new RuntimeException("Failed to delete "+file.getPath());
         }
+    }
+
+    public Compilable getClass(String name){
+        if(classes.containsKey(name)) return classes.get(name);
+        if(libClasses.containsKey(name)) return classes.get(name);
+
+        switch(CompilerConfig.targetType){
+            case Class52:
+            case Class55:
+            case Class61:
+            case Jar52:
+            case Jar55:
+            case Jar61:
+                Compilable c = JVMLibHandler.getClass(name);
+                if(c != null) libClasses.put(name, c);
+                return c;
+        }
+
+        return null;
+    }
+
+    public static Compiler getInstance(){
+        if(INSTANCE == null) return (INSTANCE = new Compiler());
+        return INSTANCE;
+    }
+
+    public static Compiler getNewInstance(){
+        return (INSTANCE = new Compiler());
     }
 }

@@ -91,7 +91,7 @@ public final class CompilerConfig {
 
     public static void addLib(String path){
         if(!libs.contains(path)){
-            if(new File(path).exists()) System.err.println(path+" does not exist");
+            if(!new File(path).exists()) System.err.println(path+" does not exist");
             else if(!path.endsWith(".jar")) System.err.println("."+path.split("\\.")[path.split("\\.").length - 1]+" is not supported");
             else libs.add(path);
         }
