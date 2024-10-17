@@ -22,8 +22,10 @@ import katajaLang.model.AccessFlag;
 import katajaLang.model.Class;
 import katajaLang.model.Modifier;
 import katajaLang.model.Uses;
+import katajaLang.model.type.DataType;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Enumeration;
@@ -49,9 +51,16 @@ public final class JVMLibHandler {
     }
 
     private static Class classFor(java.lang.Class<?> clazz){
-        Uses uses = new Uses();
-        Modifier mod = new Modifier((clazz.getModifiers() & Flag.PROTECTED) != 0 ? AccessFlag.PROTECTED : (clazz.getModifiers() & Flag.PRIVATE) != 0 ? AccessFlag.PRIVATE : AccessFlag.PUBLIC, false, false);
-        Class result = new Class(uses, mod);
+        Class result = new Class(null, getModifier(clazz.getModifiers()));
+
+        for(Field field:clazz.getFields())
+            result.fields.put(field.getName(), new katajaLang.model.Field(null, getModifier(field.getModifiers()), DataType.ofString(field.getType().getTypeName().replace(".", "/"))));
+
         return result;
+    }
+
+    private static Modifier getModifier(int mod){
+        return new Modifier((mod & Flag.PROTECTED) != 0 ? AccessFlag.PROTECTED : (mod & Flag.PRIVATE) != 0 ? AccessFlag.PRIVATE : AccessFlag.PUBLIC,
+                (mod & Flag.ABSTRACT) != 0, (mod & Flag.FINAL) != 0);
     }
 }
