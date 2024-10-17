@@ -61,7 +61,7 @@ public final class Compiler {
             }
         }
 
-        for(Compilable compilable: classes.values()) compilable.validateTypes();
+        for(String className: classes.keySet()) classes.get(className).validateTypes(className);
 
         if(CompilerConfig.clearOut && CompilerConfig.outFolder != null) deleteFolder(CompilerConfig.outFolder.toFile(), true);
 

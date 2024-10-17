@@ -26,5 +26,5 @@ public abstract class Compilable {
         this.mod = mod;
     }
 
-    public abstract void validateTypes();
+    public abstract void validateTypes(String className);
 }

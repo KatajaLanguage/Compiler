@@ -23,7 +23,7 @@ public final class Interface extends Compilable{
     }
 
     @Override
-    public void validateTypes() {
+    public void validateTypes(String className) {
 
     }
 }

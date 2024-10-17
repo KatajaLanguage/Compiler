@@ -16,12 +16,26 @@
 
 package katajaLang.model.type;
 
+import katajaLang.compiler.Compiler;
+import katajaLang.compiler.parsing.ParsingException;
+import katajaLang.model.AccessFlag;
+import katajaLang.model.Compilable;
+import katajaLang.model.Uses;
+
 public class ComplexType extends DataType{
 
     public String type;
 
     public ComplexType(String type){
         this.type = type;
+    }
+
+    public void validate(Uses uses, String clazz){
+        if(!uses.containsAlias(type)) throw new ParsingException("Unknown Type "+type);
+        type = uses.get(type);
+        Compilable c = Compiler.getInstance().getClass(type);
+        if(c == null) throw new ParsingException("Class "+type+" does not exist");
+        if(!AccessFlag.canAccess(clazz, type, c.mod.acc)) throw new ParsingException("Class "+type+" is out of its scope");
     }
 
     @Override

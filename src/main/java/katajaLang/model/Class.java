@@ -27,7 +27,7 @@ public class Class extends Compilable{
     }
 
     @Override
-    public void validateTypes() {
-        for(Field field: fields.values()) field.validateType();
+    public void validateTypes(String className) {
+        for(Field field: fields.values()) field.validateType(className);
     }
 }
