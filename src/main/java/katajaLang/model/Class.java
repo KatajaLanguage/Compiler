@@ -16,18 +16,37 @@
 
 package katajaLang.model;
 
+import katajaLang.compiler.Compiler;
+import katajaLang.compiler.parsing.ParsingException;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Class extends Compilable{
 
     public final HashMap<String, Field> fields = new HashMap<>();
+    public final ArrayList<String> interfaces;
+    public String superClass;
 
-    public Class(Uses uses, Modifier mod){
+    public Class(Uses uses, Modifier mod, ArrayList<String> interfaces){
         super(uses, mod);
+        this.interfaces = interfaces;
     }
 
     @Override
     public void validateTypes(String className) {
+        for(int i = 0;i < interfaces.size();i++){
+            String clazz = interfaces.get(i);
+            if(!uses.containsAlias(clazz)) throw new ParsingException("Class "+clazz+" is not defined");
+
+            interfaces.remove(i);
+            interfaces.add(i, uses.get(clazz));
+
+            Compilable c = Compiler.getInstance().getClass(interfaces.get(i));
+
+            if(!(c instanceof Interface)) throw new ParsingException("Expected interface got Class "+c);
+        }
+
         for(Field field: fields.values()) field.validateType(className);
     }
 }

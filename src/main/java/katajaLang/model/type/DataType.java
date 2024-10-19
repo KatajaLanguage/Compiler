@@ -47,6 +47,7 @@ public abstract class DataType {
             case "byte":
                 return BYTE;
             default:
+                //TODO array types
                 return new ComplexType(type);
         }
     }

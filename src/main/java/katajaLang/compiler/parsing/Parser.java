@@ -27,6 +27,7 @@ import katajaLang.model.type.PrimitiveType;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public final class Parser {
@@ -52,7 +53,7 @@ public final class Parser {
 
         if(0 < file.getPath().length() - file.getName().length() - 1) path = file.getPath().substring(0, file.getPath().length() - file.getName().length() - 1);
         else path = "";
-        if(path.startsWith(folder.replace("/", "\\"))) path = path.substring(folder.length());
+        if(path.startsWith(folder.replace("/", "\\"))) path = path.substring(folder.length()+1);
         else if(folder.endsWith(".ktj")) path = "";
         name = file.getName().substring(0, file.getName().length() - 4);
 
@@ -61,7 +62,20 @@ public final class Parser {
             else parseMod();
         }
 
-        return classes;
+        if(classes.size() == 1 && classes.keySet().toArray(new String[0])[0].equals(name)){
+            uses.addUse(name, name);
+            return classes;
+        }else{
+            HashMap<String, Compilable> result = new HashMap<>();
+            String path = (this.path.isEmpty() ? "" : this.path+"/")+this.name+"/";
+
+            for(String clazz: classes.keySet()){
+                result.put(path+clazz, classes.get(clazz));
+                uses.addUse(clazz, path+clazz);
+            }
+
+            return result;
+        }
     }
 
     private void parseUse(){
@@ -127,13 +141,25 @@ public final class Parser {
     }
 
     private void parseClass(Modifier mod){
-        String name = parseName();
+        String name = th.assertToken(TokenType.IDENTIFIER).value;
 
         if(mod.isInvalidForClass()) err("Illegal Modifier for class "+name);
 
+        ArrayList<String> superClasses = new ArrayList<>();
+
+        if(th.isNext("extends")){
+            do{
+                String superClass = th.assertToken(TokenType.IDENTIFIER).value;
+
+                if(superClasses.contains(superClass)) err("Class "+superClass+" is already extended");
+
+                superClasses.add(superClass);
+            }while(th.isNext(","));
+        }
+
         th.assertToken("{");
 
-        Class clazz = new Class(uses, mod);
+        Class clazz = new Class(uses, mod, superClasses);
         current = clazz;
 
         while(!th.isNext("}")){
@@ -144,11 +170,11 @@ public final class Parser {
         th.assertEndOfStatement();
 
         if(!classes.containsKey(name)) classes.put(name, clazz);
-        else throw new ParsingException("Class "+name+" is already defined");
+        else err("Class "+name+" is already defined");
     }
 
     private void parseInterface(Modifier mod){
-        String name = parseName();
+        String name = th.assertToken(TokenType.IDENTIFIER).value;
 
         if(mod.isInvalidForInterface()) err("Illegal Modifier for interface "+name);
 
@@ -157,15 +183,11 @@ public final class Parser {
         th.assertEndOfStatement();
 
         if(!classes.containsKey(name)) classes.put(name, new Interface(uses, mod));
-        else throw new ParsingException("Class "+name+" is already defined");
-    }
-
-    private String parseName(){
-        return (path.isEmpty() ? "" : path+"/")+this.name+"/"+th.assertToken(TokenType.IDENTIFIER).value;
+        else err("Class "+name+" is already defined");
     }
 
     private void parseField(Modifier mod){
-        DataType type = parseType();
+        DataType type = parseDataType();
         String name = th.assertToken(TokenType.IDENTIFIER).value;
         th.assertEndOfStatement();
 
@@ -184,7 +206,7 @@ public final class Parser {
         }
     }
 
-    private DataType parseType(){
+    private DataType parseDataType(){
         th.assertToken(TokenType.IDENTIFIER);
 
         DataType type;

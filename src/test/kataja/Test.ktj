@@ -1,8 +1,9 @@
-use java/lang/String
-
-private final class Test{
-    public String[] i
+private final class Test extends A, B{
+# scope and final/sealed checking
 }
+
+public interface A{}
+public interface B{}
 
 ##
 -t class 52 -d true -o out true -c src/test/kataja/Test.ktj -q
