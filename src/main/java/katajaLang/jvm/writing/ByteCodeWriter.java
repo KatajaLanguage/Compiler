@@ -18,6 +18,7 @@ package katajaLang.jvm.writing;
 
 import katajaLang.compiler.CompilerConfig;
 import katajaLang.compiler.CompilingException;
+import katajaLang.jvm.Attribute;
 import katajaLang.jvm.constpool.*;
 import katajaLang.jvm.infos.FieldInfo;
 
@@ -210,7 +211,13 @@ final class ByteCodeWriter {
     }
 
     private void writeAttributes() throws IOException {
-        write2(0);
+        write2(clazz.attributes.size());
+
+        for(Attribute attribute: clazz.attributes){
+            write2(attribute.attribute_name_index);
+            write4(attribute.attribute_length);
+            write2(attribute.signature_index);
+        }
     }
 
     private void write8(long i) throws IOException {

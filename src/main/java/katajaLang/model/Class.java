@@ -26,8 +26,8 @@ public class Class extends Compilable{
 
     public final HashMap<String, Field> fields = new HashMap<>();
 
-    public Class(Uses uses, Modifier mod, ArrayList<String> interfaces){
-        super(uses, mod, interfaces);
+    public Class(Uses uses, String src, Modifier mod, ArrayList<String> interfaces){
+        super(uses, src, mod, interfaces);
     }
 
     @Override

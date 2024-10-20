@@ -16,6 +16,7 @@
 
 package katajaLang.jvm.writing;
 
+import katajaLang.jvm.Attribute;
 import katajaLang.jvm.bytecode.Flag;
 import katajaLang.jvm.constpool.ConstPool;
 import katajaLang.jvm.infos.FieldInfo;
@@ -35,8 +36,9 @@ final class JVMWritableClass {
     public final int this_class;
     public final int super_class;
     public final int[] interfaces;
+    public final ArrayList<Attribute> attributes = new ArrayList<>();
 
-    JVMWritableClass(Modifier mod, String name, boolean isInterface, String superClass, String[] interfaces){
+    JVMWritableClass(Modifier mod, String name, boolean isInterface, String superClass, String[] interfaces, String src){
         this.mod = mod;
         this.isInterface = isInterface;
 
@@ -47,6 +49,8 @@ final class JVMWritableClass {
 
         this.interfaces = new int[interfaces.length];
         for(int i = 0;i < interfaces.length;i++) this.interfaces[i] = constPool.addClassInfo(interfaces[i]);
+
+        attributes.add(new Attribute((short) constPool.addUtf8Info("SourceFile"), 2, (short) constPool.addUtf8Info(src)));
     }
 
     void addField(String name, Field field){

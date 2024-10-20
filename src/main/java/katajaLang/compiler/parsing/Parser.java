@@ -159,7 +159,7 @@ public final class Parser {
 
         th.assertToken("{");
 
-        Class clazz = new Class(uses, mod, superClasses);
+        Class clazz = new Class(uses, getFileName(), mod, superClasses);
         current = clazz;
 
         while(!th.isNext("}")){
@@ -194,7 +194,7 @@ public final class Parser {
         th.assertToken("}");
         th.assertEndOfStatement();
 
-        if(!classes.containsKey(name)) classes.put(name, new Interface(uses, mod, superInterfaces));
+        if(!classes.containsKey(name)) classes.put(name, new Interface(uses, getFileName(), mod, superInterfaces));
         else err("Class "+name+" is already defined");
     }
 
@@ -232,6 +232,10 @@ public final class Parser {
         }
 
         return type;
+    }
+
+    private String getFileName(){
+        return (path.isEmpty() ? "" : path+"/")+name+".ktj";
     }
 
     private void err(String message) throws ParsingException{

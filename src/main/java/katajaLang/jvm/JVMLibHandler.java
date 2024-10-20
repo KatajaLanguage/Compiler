@@ -51,11 +51,11 @@ public final class JVMLibHandler {
 
     private static Compilable classFor(java.lang.Class<?> clazz){
         if(clazz.isInterface()){
-            Interface result = new Interface(null, getModifier(clazz.getModifiers()), new ArrayList<>());
+            Interface result = new Interface(null, null, getModifier(clazz.getModifiers()), new ArrayList<>());
             
             return result;
         }else {
-            Class result = new Class(null, getModifier(clazz.getModifiers()), new ArrayList<>());
+            Class result = new Class(null, null, getModifier(clazz.getModifiers()), new ArrayList<>());
 
             for (Field field : clazz.getFields())
                 result.fields.put(field.getName(), new katajaLang.model.Field(null, getModifier(field.getModifiers()), DataType.ofString(field.getType().getTypeName().replace(".", "/"))));

@@ -14,18 +14,16 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package katajaLang.model;
+package katajaLang.jvm;
 
-import java.util.ArrayList;
+public final class Attribute{
+    public final short attribute_name_index;
+    public final int attribute_length;
+    public final short signature_index;
 
-public final class Interface extends Compilable{
-
-    public Interface(Uses uses, String src, Modifier mod, ArrayList<String> interfaces){
-        super(uses, src, mod, interfaces);
-    }
-
-    @Override
-    public void validateTypes(String className) {
-        super.validateTypes(className);
+    public Attribute(short attribute_name_index, int attribute_length, short signature_index){
+        this.attribute_name_index = attribute_name_index;
+        this.attribute_length = attribute_length;
+        this.signature_index = signature_index;
     }
 }

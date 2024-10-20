@@ -24,12 +24,14 @@ import java.util.ArrayList;
 public abstract class Compilable {
 
     public final Uses uses;
+    public final String src;
     public final Modifier mod;
     public String superClass = "java/lang/Object";
     public final ArrayList<String> interfaces;
 
-    public Compilable(Uses uses, Modifier mod, ArrayList<String> interfaces){
+    public Compilable(Uses uses, String src, Modifier mod, ArrayList<String> interfaces){
         this.uses = uses;
+        this.src = src;
         this.mod = mod;
         this.interfaces = interfaces;
     }
