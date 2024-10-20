@@ -44,6 +44,7 @@ public abstract class Compilable {
 
             Compilable c = Compiler.getInstance().getClass(interfaces.get(i));
 
+            if(c == null) throw new ParsingException("Class "+uses.get(clazz)+" is not defined");
             if(!(c instanceof Interface)) throw new ParsingException("Expected interface got Class "+uses.get(clazz));
             if(!AccessFlag.canAccess(className, uses.get(clazz), c.mod.acc)) throw new ParsingException("Class "+uses.get(clazz)+" is used out side of its scope");
         }

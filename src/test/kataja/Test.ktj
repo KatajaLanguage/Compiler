@@ -1,5 +1,6 @@
-public interface A extends B{}
-public interface B{}
+use java/util/ArrayList as A
+
+public class Test extends A{}
 
 ##
 -t class 52 -d true -o out true -c src/test/kataja/Test.ktj -q

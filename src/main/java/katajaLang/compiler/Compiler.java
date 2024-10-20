@@ -132,6 +132,7 @@ public final class Compiler {
         for(File file:folder.listFiles()){
             if(file.isDirectory()) deleteFolder(file, true);
             else if(!file.delete()) throw new RuntimeException("Failed to delete "+file.getPath());
+            if(delete && folder.listFiles().length == 0) folder.delete();
         }
     }
 
