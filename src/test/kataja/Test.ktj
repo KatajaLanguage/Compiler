@@ -1,8 +1,4 @@
-private final class Test extends A, B{
-# scope and final/sealed checking
-}
-
-public interface A{}
+public interface A extends B{}
 public interface B{}
 
 ##

@@ -34,15 +34,19 @@ final class JVMWritableClass {
 
     public final int this_class;
     public final int super_class;
+    public final int[] interfaces;
 
-    JVMWritableClass(Modifier mod, String name, boolean isInterface){
+    JVMWritableClass(Modifier mod, String name, boolean isInterface, String superClass, String[] interfaces){
         this.mod = mod;
         this.isInterface = isInterface;
 
         constPool = new ConstPool();
 
         this_class = constPool.addClassInfo(name);
-        super_class = constPool.addClassInfo("java/lang/Object");
+        super_class = constPool.addClassInfo(superClass);
+
+        this.interfaces = new int[interfaces.length];
+        for(int i = 0;i < interfaces.length;i++) this.interfaces[i] = constPool.addClassInfo(interfaces[i]);
     }
 
     void addField(String name, Field field){

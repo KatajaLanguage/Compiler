@@ -16,15 +16,36 @@
 
 package katajaLang.model;
 
+import katajaLang.compiler.Compiler;
+import katajaLang.compiler.parsing.ParsingException;
+
+import java.util.ArrayList;
+
 public abstract class Compilable {
 
     public final Uses uses;
     public final Modifier mod;
+    public String superClass = "java/lang/Object";
+    public final ArrayList<String> interfaces;
 
-    public Compilable(Uses uses, Modifier mod){
+    public Compilable(Uses uses, Modifier mod, ArrayList<String> interfaces){
         this.uses = uses;
         this.mod = mod;
+        this.interfaces = interfaces;
     }
 
-    public abstract void validateTypes(String className);
+    public void validateTypes(String className){
+        for(int i = 0;i < interfaces.size();i++){
+            String clazz = interfaces.get(i);
+            if(!uses.containsAlias(clazz)) throw new ParsingException("Class "+clazz+" is not defined");
+
+            interfaces.remove(i);
+            interfaces.add(i, uses.get(clazz));
+
+            Compilable c = Compiler.getInstance().getClass(interfaces.get(i));
+
+            if(!(c instanceof Interface)) throw new ParsingException("Expected interface got Class "+uses.get(clazz));
+            if(!AccessFlag.canAccess(className, uses.get(clazz), c.mod.acc)) throw new ParsingException("Class "+uses.get(clazz)+" is used out side of its scope");
+        }
+    }
 }

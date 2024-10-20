@@ -25,27 +25,29 @@ import java.util.HashMap;
 public class Class extends Compilable{
 
     public final HashMap<String, Field> fields = new HashMap<>();
-    public final ArrayList<String> interfaces;
-    public String superClass;
 
     public Class(Uses uses, Modifier mod, ArrayList<String> interfaces){
-        super(uses, mod);
-        this.interfaces = interfaces;
+        super(uses, mod, interfaces);
     }
 
     @Override
     public void validateTypes(String className) {
-        for(int i = 0;i < interfaces.size();i++){
-            String clazz = interfaces.get(i);
-            if(!uses.containsAlias(clazz)) throw new ParsingException("Class "+clazz+" is not defined");
+        if(!interfaces.isEmpty()){
+            String first = interfaces.get(0);
 
-            interfaces.remove(i);
-            interfaces.add(i, uses.get(clazz));
+            if(!uses.containsAlias(first)) throw new ParsingException("Class "+first+" is not defined");
 
-            Compilable c = Compiler.getInstance().getClass(interfaces.get(i));
+            Compilable c = Compiler.getInstance().getClass(uses.get(first));
+            if(c instanceof Class){
+                superClass = uses.get(first);
+                interfaces.remove(0);
 
-            if(!(c instanceof Interface)) throw new ParsingException("Expected interface got Class "+c);
+                if(!AccessFlag.canAccess(className, superClass, c.mod.acc)) throw new ParsingException("Class "+superClass+" is used out side of its scope");
+                if(c.mod.finaly) throw new ParsingException(superClass+" is final and can't be extended");
+            }
         }
+
+        super.validateTypes(className);
 
         for(Field field: fields.values()) field.validateType(className);
     }

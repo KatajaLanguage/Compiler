@@ -16,14 +16,16 @@
 
 package katajaLang.model;
 
+import java.util.ArrayList;
+
 public final class Interface extends Compilable{
 
-    public Interface(Uses uses, Modifier mod){
-        super(uses, mod);
+    public Interface(Uses uses, Modifier mod, ArrayList<String> interfaces){
+        super(uses, mod, interfaces);
     }
 
     @Override
     public void validateTypes(String className) {
-
+        super.validateTypes(className);
     }
 }

@@ -189,7 +189,8 @@ final class ByteCodeWriter {
     }
 
     private void writeInterfaces() throws IOException {
-        write2(0);
+        write2(clazz.interfaces.length);
+        for(int index:clazz.interfaces) write2(index);
     }
 
     private void writeFields() throws IOException {

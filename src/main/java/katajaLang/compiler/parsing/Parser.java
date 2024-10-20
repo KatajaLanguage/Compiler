@@ -178,11 +178,23 @@ public final class Parser {
 
         if(mod.isInvalidForInterface()) err("Illegal Modifier for interface "+name);
 
+        ArrayList<String> superInterfaces = new ArrayList<>();
+
+        if(th.isNext("extends")){
+            do{
+                String superInterface = th.assertToken(TokenType.IDENTIFIER).value;
+
+                if(superInterfaces.contains(superInterface)) err("Class "+superInterface+" is already extended");
+
+                superInterfaces.add(superInterface);
+            }while(th.isNext(","));
+        }
+
         th.assertToken("{");
         th.assertToken("}");
         th.assertEndOfStatement();
 
-        if(!classes.containsKey(name)) classes.put(name, new Interface(uses, mod));
+        if(!classes.containsKey(name)) classes.put(name, new Interface(uses, mod, superInterfaces));
         else err("Class "+name+" is already defined");
     }
 

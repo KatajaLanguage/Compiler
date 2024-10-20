@@ -23,7 +23,7 @@ import katajaLang.model.Interface;
 final class JVMClassBuilder {
 
     static JVMWritableClass buildWritableClass(Compilable compilable, String clazzName){
-        JVMWritableClass clazz = new JVMWritableClass(compilable.mod, clazzName, compilable instanceof Interface);
+        JVMWritableClass clazz = new JVMWritableClass(compilable.mod, clazzName, compilable instanceof Interface, compilable.superClass, compilable.interfaces.toArray(new String[0]));
 
         if(compilable instanceof Class){
             for(String fieldName:((Class) compilable).fields.keySet()) clazz.addField(fieldName, ((Class) compilable).fields.get(fieldName));

@@ -51,7 +51,7 @@ public final class JVMLibHandler {
 
     private static Compilable classFor(java.lang.Class<?> clazz){
         if((clazz.getModifiers() & Flag.INTERFACE) != 0){
-            Interface result = new Interface(null, getModifier(clazz.getModifiers()));
+            Interface result = new Interface(null, getModifier(clazz.getModifiers()), new ArrayList<>());
             
             return result;
         }else {
