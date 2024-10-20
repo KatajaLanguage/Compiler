@@ -63,7 +63,8 @@ public final class Compiler {
 
         for(String className: classes.keySet()) classes.get(className).validateTypes(className);
 
-        if(CompilerConfig.clearOut && CompilerConfig.outFolder != null) deleteFolder(CompilerConfig.outFolder.toFile(), true);
+        if(CompilerConfig.outFolder == null) throw new RuntimeException("Out folder must be specified");
+        else if(CompilerConfig.outFolder.toFile().exists() && CompilerConfig.clearOut) deleteFolder(CompilerConfig.outFolder.toFile(), false);
 
         switch(CompilerConfig.targetType){
             case Class52:
@@ -132,13 +133,13 @@ public final class Compiler {
         for(File file:folder.listFiles()){
             if(file.isDirectory()) deleteFolder(file, true);
             else if(!file.delete()) throw new RuntimeException("Failed to delete "+file.getPath());
-            if(delete && folder.listFiles().length == 0) folder.delete();
         }
+        if(delete && !folder.delete()) throw new RuntimeException("Failed to delete "+folder.getPath());
     }
 
     public Compilable getClass(String name){
         if(classes.containsKey(name)) return classes.get(name);
-        if(libClasses.containsKey(name)) return classes.get(name);
+        if(libClasses.containsKey(name)) return libClasses.get(name);
 
         switch(CompilerConfig.targetType){
             case Class52:
