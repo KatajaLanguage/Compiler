@@ -16,19 +16,26 @@
 
 package katajaLang.model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import katajaLang.model.type.ComplexType;
+import katajaLang.model.type.DataType;
 
-public final class Interface extends Compilable{
+public final class Method {
 
-    public final HashMap<String, Method> methods = new HashMap<>();
+    public final Uses uses;
+    public final Modifier mod;
+    public final DataType type;
 
-    public Interface(Uses uses, String src, Modifier mod, ArrayList<String> interfaces){
-        super(uses, src, mod, interfaces);
+    public Method(Uses uses, Modifier mod, DataType type){
+        this.uses = uses;
+        this.mod = mod;
+        this.type = type;
     }
 
-    @Override
-    public void validateTypes(String className) {
-        super.validateTypes(className);
+    public void validateType(String className){
+        DataType dataType = type.ignoreArray();
+
+        if(dataType instanceof ComplexType){
+            ((ComplexType) dataType).validate(uses, className);
+        }
     }
 }

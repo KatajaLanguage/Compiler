@@ -21,6 +21,7 @@ import katajaLang.compiler.CompilingException;
 import katajaLang.jvm.Attribute;
 import katajaLang.jvm.constpool.*;
 import katajaLang.jvm.infos.FieldInfo;
+import katajaLang.jvm.infos.MethodInfo;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -207,7 +208,15 @@ final class ByteCodeWriter {
     }
 
     private void writeMethods() throws IOException {
-        write2(0);
+        MethodInfo[] methods = clazz.getMethods();
+        write2(methods.length);
+
+        for(MethodInfo mInfo:methods){
+            write2(mInfo.access_flag);
+            write2(mInfo.name_index);
+            write2(mInfo.descriptor_index);
+            write2(0);
+        }
     }
 
     private void writeAttributes() throws IOException {

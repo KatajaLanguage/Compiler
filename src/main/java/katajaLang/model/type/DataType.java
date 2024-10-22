@@ -46,6 +46,8 @@ public abstract class DataType {
                 return CHAR;
             case "byte":
                 return BYTE;
+            case "void":
+                return VOID;
             default:
                 //TODO array types
                 return new ComplexType(type);

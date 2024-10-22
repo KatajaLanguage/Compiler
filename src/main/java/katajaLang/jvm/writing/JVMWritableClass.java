@@ -20,7 +20,9 @@ import katajaLang.jvm.Attribute;
 import katajaLang.jvm.bytecode.Flag;
 import katajaLang.jvm.constpool.ConstPool;
 import katajaLang.jvm.infos.FieldInfo;
+import katajaLang.jvm.infos.MethodInfo;
 import katajaLang.model.Field;
+import katajaLang.model.Method;
 import katajaLang.model.Modifier;
 
 import java.util.ArrayList;
@@ -28,6 +30,7 @@ import java.util.ArrayList;
 final class JVMWritableClass {
 
     private final ArrayList<FieldInfo> fields = new ArrayList<>();
+    private final ArrayList<MethodInfo> methods = new ArrayList<>();
 
     private final Modifier mod;
     private final ConstPool constPool;
@@ -57,6 +60,10 @@ final class JVMWritableClass {
         fields.add(new FieldInfo(Flag.getAccessFlag(field.mod), constPool.addUtf8Info(name), constPool.addTypeDescriptor(field.type)));
     }
 
+    void addMethod(String name, Method method){
+        methods.add(new MethodInfo(Flag.getAccessFlag(method.mod), constPool.addUtf8Info(name), constPool.addMethodDescriptor(method.type)));
+    }
+
     int getAccessFlag(){
         int acc = Flag.getAccessFlag(mod);
 
@@ -71,5 +78,9 @@ final class JVMWritableClass {
 
     FieldInfo[] getFields(){
         return fields.toArray(new FieldInfo[0]);
+    }
+
+    MethodInfo[] getMethods(){
+        return methods.toArray(new MethodInfo[0]);
     }
 }

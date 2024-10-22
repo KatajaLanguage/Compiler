@@ -30,6 +30,7 @@ public class PrimitiveType extends DataType{
     public static final PrimitiveType BOOLEAN = new PrimitiveType();
     public static final PrimitiveType CHAR = new PrimitiveType();
     public static final PrimitiveType BYTE = new PrimitiveType();
+    public static final PrimitiveType VOID = new PrimitiveType();
 
     static{
         PRIMITIVES.add("int");
@@ -40,6 +41,7 @@ public class PrimitiveType extends DataType{
         PRIMITIVES.add("boolean");
         PRIMITIVES.add("char");
         PRIMITIVES.add("byte");
+        PRIMITIVES.add("void");
     }
 
     @Override

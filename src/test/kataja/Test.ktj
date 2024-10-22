@@ -1,6 +1,6 @@
-use java/lang/Comparable as A
-
-public class Test extends A{}
+public abstract class Test{
+    public abstract void test()
+}
 
 ##
 -t class 52 -d true -o out true -c src/test/kataja/Test.ktj -q

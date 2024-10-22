@@ -14,21 +14,16 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package katajaLang.model;
+package katajaLang.jvm.infos;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+public final class MethodInfo implements Info{
+    public final int access_flag;
+    public final int name_index;
+    public final int descriptor_index;
 
-public final class Interface extends Compilable{
-
-    public final HashMap<String, Method> methods = new HashMap<>();
-
-    public Interface(Uses uses, String src, Modifier mod, ArrayList<String> interfaces){
-        super(uses, src, mod, interfaces);
-    }
-
-    @Override
-    public void validateTypes(String className) {
-        super.validateTypes(className);
+    public MethodInfo(int access_flag, int name_index, int descriptor_index){
+        this.access_flag = access_flag;
+        this.name_index = name_index;
+        this.descriptor_index = descriptor_index;
     }
 }

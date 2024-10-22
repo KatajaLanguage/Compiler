@@ -128,14 +128,16 @@ public final class Parser {
 
         switch(th.assertToken(TokenType.IDENTIFIER).value){
             case "class":
+                if(current != null) err("Expected Method or Field");
                 parseClass(mod);
                 break;
             case "interface":
+                if(current != null) err("Expected Method or Field");
                 parseInterface(mod);
                 break;
             default:
                 th.last();
-                parseField(mod);
+                parseMethodOrField(mod);
                 break;
         }
     }
@@ -190,31 +192,57 @@ public final class Parser {
             }while(th.isNext(","));
         }
 
+        Interface clazz = new Interface(uses, getFileName(), mod, superInterfaces);
+        current = clazz;
+
         th.assertToken("{");
-        th.assertToken("}");
+        while(!th.isNext("}")) parseMod();
         th.assertEndOfStatement();
 
-        if(!classes.containsKey(name)) classes.put(name, new Interface(uses, getFileName(), mod, superInterfaces));
+        current = null;
+
+        if(!classes.containsKey(name)) classes.put(name, clazz);
         else err("Class "+name+" is already defined");
     }
 
-    private void parseField(Modifier mod){
+    private void parseMethodOrField(Modifier mod){
         DataType type = parseDataType();
         String name = th.assertToken(TokenType.IDENTIFIER).value;
-        th.assertEndOfStatement();
 
-        if(mod.isInvalidForField()) err("Illegal Modifier for field "+name);
+        if(th.isNext("(")){
+            // Method
+            th.assertToken(")");
 
-        Field field = new Field(uses, mod, type);
+            if(current == null) err("Expected Class");
 
-        if(current == null){
-            err("field "+name+" must be in a class");
+            if(current instanceof Interface){
+                if(!mod.abstrakt) err("Method should be abstract");
+                if(((Interface) current).methods.containsKey(name)) err("Method is already defined");
+
+                ((Interface) current).methods.put(name, new Method(uses, mod, type));
+            }else if(current instanceof Class){
+                if(((Class) current).methods.containsKey(name)) err("Method is already defined");
+                if(mod.abstrakt && !current.mod.abstrakt) err("Class should be abstract");
+
+                ((Class) current).methods.put(name, new Method(uses, mod, type));
+            }else err("");
         }else{
-            if(current instanceof Class){
-                if(((Class) current).fields.containsKey(name)) err("field "+name+" is already defined");
+            //Field
+            th.assertEndOfStatement();
 
-                ((Class) current).fields.put(name, field);
-            }else err("field "+name+" must be in a class");
+            if(mod.isInvalidForField()) err("Illegal Modifier for field "+name);
+
+            Field field = new Field(uses, mod, type);
+
+            if(current == null){
+                err("field "+name+" must be in a class");
+            }else{
+                if(current instanceof Class){
+                    if(((Class) current).fields.containsKey(name)) err("field "+name+" is already defined");
+
+                    ((Class) current).fields.put(name, field);
+                }else err("field "+name+" must be in a class");
+            }
         }
     }
 

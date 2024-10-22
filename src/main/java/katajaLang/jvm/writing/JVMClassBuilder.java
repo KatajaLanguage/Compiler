@@ -27,6 +27,9 @@ final class JVMClassBuilder {
 
         if(compilable instanceof Class){
             for(String fieldName:((Class) compilable).fields.keySet()) clazz.addField(fieldName, ((Class) compilable).fields.get(fieldName));
+            for(String methodName: ((Class) compilable).methods.keySet()) clazz.addMethod(methodName, ((Class) compilable).methods.get(methodName));
+        }else if(compilable instanceof Interface){
+            for(String methodName: ((Interface) compilable).methods.keySet()) clazz.addMethod(methodName, ((Interface) compilable).methods.get(methodName));
         }
 
         return clazz;
