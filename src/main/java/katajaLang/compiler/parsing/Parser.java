@@ -211,20 +211,23 @@ public final class Parser {
 
         if(th.isNext("(")){
             // Method
+            ArrayList<DataType> types = new ArrayList<>();
             th.assertToken(")");
 
             if(current == null) err("Expected Class");
 
+            Method.MethodDesc desc = new Method.MethodDesc(name, type, types.toArray(new DataType[0]));
+
             if(current instanceof Interface){
                 if(!mod.abstrakt) err("Method should be abstract");
-                if(((Interface) current).methods.containsKey(name)) err("Method is already defined");
+                if(((Interface) current).methods.containsKey(desc)) err("Method is already defined");
 
-                ((Interface) current).methods.put(name, new Method(uses, mod, type));
+                ((Interface) current).methods.put(desc, new Method(uses, mod, desc));
             }else if(current instanceof Class){
-                if(((Class) current).methods.containsKey(name)) err("Method is already defined");
+                if(((Class) current).methods.containsKey(desc)) err("Method is already defined");
                 if(mod.abstrakt && !current.mod.abstrakt) err("Class should be abstract");
 
-                ((Class) current).methods.put(name, new Method(uses, mod, type));
+                ((Class) current).methods.put(desc, new Method(uses, mod, desc));
             }else err("");
         }else{
             //Field

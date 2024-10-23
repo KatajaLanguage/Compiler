@@ -19,6 +19,7 @@ package katajaLang.jvm.writing;
 import katajaLang.model.Class;
 import katajaLang.model.Compilable;
 import katajaLang.model.Interface;
+import katajaLang.model.Method;
 
 final class JVMClassBuilder {
 
@@ -27,9 +28,9 @@ final class JVMClassBuilder {
 
         if(compilable instanceof Class){
             for(String fieldName:((Class) compilable).fields.keySet()) clazz.addField(fieldName, ((Class) compilable).fields.get(fieldName));
-            for(String methodName: ((Class) compilable).methods.keySet()) clazz.addMethod(methodName, ((Class) compilable).methods.get(methodName));
+            for(Method.MethodDesc desc: ((Class) compilable).methods.keySet()) clazz.addMethod(desc.name, ((Class) compilable).methods.get(desc));
         }else if(compilable instanceof Interface){
-            for(String methodName: ((Interface) compilable).methods.keySet()) clazz.addMethod(methodName, ((Interface) compilable).methods.get(methodName));
+            for(Method.MethodDesc desc: ((Interface) compilable).methods.keySet()) clazz.addMethod(desc.name, ((Interface) compilable).methods.get(desc));
         }
 
         return clazz;

@@ -61,7 +61,7 @@ final class JVMWritableClass {
     }
 
     void addMethod(String name, Method method){
-        methods.add(new MethodInfo(Flag.getAccessFlag(method.mod), constPool.addUtf8Info(name), constPool.addMethodDescriptor(method.type)));
+        methods.add(new MethodInfo(Flag.getAccessFlag(method.mod), constPool.addUtf8Info(name), constPool.addMethodDescriptor(method.desc)));
     }
 
     int getAccessFlag(){

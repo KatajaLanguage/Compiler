@@ -16,6 +16,7 @@
 
 package katajaLang.jvm.constpool;
 
+import katajaLang.model.Method;
 import katajaLang.model.type.ArrayType;
 import katajaLang.model.type.ComplexType;
 import katajaLang.model.type.DataType;
@@ -33,6 +34,18 @@ public final class ConstPool {
     }
 
     public int addTypeDescriptor(DataType type){
+        return addUtf8Info(toDesc(type));
+    }
+
+    public int addMethodDescriptor(Method.MethodDesc desc){
+        StringBuilder result = new StringBuilder("()");
+
+        result.append(toDesc(desc.type));
+
+        return addUtf8Info(result.toString());
+    }
+
+    private String toDesc(DataType type){
         StringBuilder desc = new StringBuilder();
 
         while(type instanceof ArrayType){
@@ -53,31 +66,7 @@ public final class ConstPool {
             else if(type.equals(PrimitiveType.VOID)) desc.append("V");
         }
 
-        return addUtf8Info(desc.toString());
-    }
-
-    public int addMethodDescriptor(DataType type){
-        StringBuilder desc = new StringBuilder("()");
-
-        while(type instanceof ArrayType){
-            desc.append("[");
-            type = ((ArrayType) type).type;
-        }
-
-        if(type instanceof ComplexType) desc.append("L").append(((ComplexType) type).type).append(";");
-        else if(type instanceof PrimitiveType){
-            if(type.equals(PrimitiveType.BYTE)) desc.append("B");
-            else if(type.equals(PrimitiveType.CHAR)) desc.append("C");
-            else if(type.equals(PrimitiveType.INT)) desc.append("I");
-            else if(type.equals(PrimitiveType.DOUBLE)) desc.append("D");
-            else if(type.equals(PrimitiveType.FLOAT)) desc.append("F");
-            else if(type.equals(PrimitiveType.LONG)) desc.append("J");
-            else if(type.equals(PrimitiveType.SHORT)) desc.append("S");
-            else if(type.equals(PrimitiveType.BOOLEAN)) desc.append("Z");
-            else if(type.equals(PrimitiveType.VOID)) desc.append("V");
-        }
-
-        return addUtf8Info(desc.toString());
+        return desc.toString();
     }
 
     public int addClassInfo(String clazz){

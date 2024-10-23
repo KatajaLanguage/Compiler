@@ -21,7 +21,7 @@ import java.util.HashMap;
 
 public final class Interface extends Compilable{
 
-    public final HashMap<String, Method> methods = new HashMap<>();
+    public final HashMap<Method.MethodDesc, Method> methods = new HashMap<>();
 
     public Interface(Uses uses, String src, Modifier mod, ArrayList<String> interfaces){
         super(uses, src, mod, interfaces);

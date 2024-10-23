@@ -21,21 +21,41 @@ import katajaLang.model.type.DataType;
 
 public final class Method {
 
+    public static class MethodDesc{
+        public final String name;
+        public final DataType type;
+        public final DataType[] parameters;
+
+        public MethodDesc(String name, DataType type, DataType[] parameters){
+            this.name = name;
+            this.type = type;
+            this.parameters = parameters;
+        }
+
+        public boolean equals(MethodDesc obj) {
+            if(!name.equals(obj.name)) return false;
+            if(parameters.length != obj.parameters.length) return false;
+            for(int i=0;i<parameters.length;i++) if(!parameters[i].equals(obj.parameters[i])) return false;
+            return true;
+        }
+    }
+
     public final Uses uses;
     public final Modifier mod;
-    public final DataType type;
+    public final MethodDesc desc;
 
-    public Method(Uses uses, Modifier mod, DataType type){
+    public Method(Uses uses, Modifier mod, MethodDesc desc){
         this.uses = uses;
         this.mod = mod;
-        this.type = type;
+        this.desc = desc;
     }
 
     public void validateType(String className){
-        DataType dataType = type.ignoreArray();
+        DataType dataType = desc.type.ignoreArray();
 
-        if(dataType instanceof ComplexType){
+        if(dataType instanceof ComplexType)
             ((ComplexType) dataType).validate(uses, className);
-        }
+
+
     }
 }

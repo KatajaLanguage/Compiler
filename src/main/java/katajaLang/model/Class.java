@@ -25,7 +25,7 @@ import java.util.HashMap;
 public class Class extends Compilable{
 
     public final HashMap<String, Field> fields = new HashMap<>();
-    public final HashMap<String, Method> methods = new HashMap<>();
+    public final HashMap<Method.MethodDesc, Method> methods = new HashMap<>();
 
     public Class(Uses uses, String src, Modifier mod, ArrayList<String> interfaces){
         super(uses, src, mod, interfaces);
