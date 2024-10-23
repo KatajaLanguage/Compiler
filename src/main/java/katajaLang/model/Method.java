@@ -57,11 +57,13 @@ public final class Method {
     public final Uses uses;
     public final Modifier mod;
     public final MethodDesc desc;
+    public final String code;
 
-    public Method(Uses uses, Modifier mod, MethodDesc desc){
+    public Method(Uses uses, Modifier mod, MethodDesc desc, String code){
         this.uses = uses;
         this.mod = mod;
         this.desc = desc;
+        this.code = code;
     }
 
     public void validateType(String className){

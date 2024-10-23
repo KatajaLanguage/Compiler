@@ -230,25 +230,6 @@ public final class TokenHandler {
     }
 
     private void err(String message) throws ParsingException{
-        int line = getLine();
-
-        StringBuilder sb = new StringBuilder(message);
-        sb.append(" near ");
-
-        String index = getIndex();
-        try{
-            if(last() == null) throw new ParsingException("");
-            sb.append(current());
-            next();
-        }catch(ParsingException ignored){
-            setIndex(index);
-        }
-
-        if(line < 0 || line >= token.length || this.index == -1 || this.index >= token[line].length) throw new ParsingException(sb+" at "+file+":"+getLine());
-
-        sb.append(" ").append(current()).append(" ");
-        if(hasNext()) sb.append(next());
-
-        throw new ParsingException(sb+" at "+file+":"+getLine());
+        throw new ParsingException(message+" at "+file+":"+getLine());
     }
 }

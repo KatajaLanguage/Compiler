@@ -228,18 +228,38 @@ public final class Parser {
                 th.assertToken(")");
             }
 
+            StringBuilder code = new StringBuilder();
+
+            if(!mod.abstrakt){
+                th.assertToken("{");
+                int i = 1;
+
+                while (i > 0) {
+                    th.assertHasNext();
+
+                    if (th.isNext("{")) {
+                        code.append("{ ");
+                        i++;
+                    } else if (th.isNext("}")) {
+                        i--;
+                        if (i > 0) code.append("} ");
+                    } else code.append(th.next()).append(" ");
+                }
+            }
+
             Method.MethodDesc desc = new Method.MethodDesc(name, type, parameterList.toArray(new Method.Parameter[0]));
+            Method method = new Method(uses, mod, desc, code.toString().isEmpty() ? null : code.toString());
 
             if(current instanceof Interface){
                 if(!mod.abstrakt) err("Method should be abstract");
                 if(((Interface) current).methods.containsKey(desc)) err("Method is already defined");
 
-                ((Interface) current).methods.put(desc, new Method(uses, mod, desc));
+                ((Interface) current).methods.put(desc, method);
             }else if(current instanceof Class){
                 if(((Class) current).methods.containsKey(desc)) err("Method is already defined");
                 if(mod.abstrakt && !current.mod.abstrakt) err("Class should be abstract");
 
-                ((Class) current).methods.put(desc, new Method(uses, mod, desc));
+                ((Class) current).methods.put(desc, method);
             }else err("");
         }else{
             //Field
