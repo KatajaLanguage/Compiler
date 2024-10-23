@@ -21,12 +21,12 @@ import katajaLang.model.type.DataType;
 
 public final class Method {
 
-    public static class MethodDesc{
+    public static final class MethodDesc{
         public final String name;
         public final DataType type;
-        public final DataType[] parameters;
+        public final Parameter[] parameters;
 
-        public MethodDesc(String name, DataType type, DataType[] parameters){
+        public MethodDesc(String name, DataType type, Parameter[] parameters){
             this.name = name;
             this.type = type;
             this.parameters = parameters;
@@ -35,8 +35,22 @@ public final class Method {
         public boolean equals(MethodDesc obj) {
             if(!name.equals(obj.name)) return false;
             if(parameters.length != obj.parameters.length) return false;
-            for(int i=0;i<parameters.length;i++) if(!parameters[i].equals(obj.parameters[i])) return false;
+            for(int i=0;i<parameters.length;i++) if(!parameters[i].type.equals(obj.parameters[i].type)) return false;
             return true;
+        }
+    }
+
+    public static final class Parameter{
+        public final String name;
+        public final DataType type;
+
+        public Parameter(String name, DataType type){
+            this.name = name;
+            this.type = type;
+        }
+
+        public boolean equals(Parameter obj) {
+            return name.equals(obj.name);
         }
     }
 

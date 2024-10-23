@@ -38,9 +38,11 @@ public final class ConstPool {
     }
 
     public int addMethodDescriptor(Method.MethodDesc desc){
-        StringBuilder result = new StringBuilder("()");
+        StringBuilder result = new StringBuilder("(");
 
-        result.append(toDesc(desc.type));
+        for(Method.Parameter parameter: desc.parameters) result.append(toDesc(parameter.type));
+
+        result.append(")").append(toDesc(desc.type));
 
         return addUtf8Info(result.toString());
     }

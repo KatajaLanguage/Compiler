@@ -206,17 +206,29 @@ public final class Parser {
     }
 
     private void parseMethodOrField(Modifier mod){
+        if(current == null) err("Expected Class");
         DataType type = parseDataType();
         String name = th.assertToken(TokenType.IDENTIFIER).value;
 
         if(th.isNext("(")){
             // Method
-            ArrayList<DataType> types = new ArrayList<>();
-            th.assertToken(")");
+            ArrayList<Method.Parameter> parameterList = new ArrayList<>();
 
-            if(current == null) err("Expected Class");
+            if(!th.isNext(")")){
+                do{
+                    DataType pType = parseDataType();
+                    String pName = th.assertToken(TokenType.IDENTIFIER).value;
 
-            Method.MethodDesc desc = new Method.MethodDesc(name, type, types.toArray(new DataType[0]));
+                    Method.Parameter parameter = new Method.Parameter(pName, pType);
+
+                    if(parameterList.contains(parameter)) err("Parameter "+pName+" is already defined");
+
+                    parameterList.add(parameter);
+                }while(th.isNext(","));
+                th.assertToken(")");
+            }
+
+            Method.MethodDesc desc = new Method.MethodDesc(name, type, parameterList.toArray(new Method.Parameter[0]));
 
             if(current instanceof Interface){
                 if(!mod.abstrakt) err("Method should be abstract");

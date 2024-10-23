@@ -1,5 +1,5 @@
 public abstract class Test{
-    public abstract int test()
+    public abstract void test(int i, double d)
 }
 
 ##
