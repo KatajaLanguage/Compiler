@@ -14,23 +14,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package katajaLang.model;
+package katajaLang.jvm.attribute;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+public final class SignatureAttribute implements Attribute{
+    public final short attribute_name_index;
+    public final short signature_index;
 
-public final class Interface extends Compilable{
-
-    public final HashMap<Method.MethodDesc, Method> methods = new HashMap<>();
-
-    public Interface(Uses uses, String src, Modifier mod, ArrayList<String> interfaces){
-        super(uses, src, mod, interfaces);
-    }
-
-    @Override
-    public void validateTypes(String className) {
-        super.validateTypes(className);
-
-        for(Method method: methods.values()) method.validateTypes(className);
+    public SignatureAttribute(short attribute_name_index, short signature_index){
+        this.attribute_name_index = attribute_name_index;
+        this.signature_index = signature_index;
     }
 }

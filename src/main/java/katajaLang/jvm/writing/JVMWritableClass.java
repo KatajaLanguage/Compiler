@@ -16,7 +16,9 @@
 
 package katajaLang.jvm.writing;
 
-import katajaLang.jvm.Attribute;
+import katajaLang.jvm.attribute.Attribute;
+import katajaLang.jvm.attribute.MethodParametersAttribute;
+import katajaLang.jvm.attribute.SignatureAttribute;
 import katajaLang.jvm.bytecode.Flag;
 import katajaLang.jvm.constpool.ConstPool;
 import katajaLang.jvm.infos.FieldInfo;
@@ -53,7 +55,7 @@ final class JVMWritableClass {
         this.interfaces = new int[interfaces.length];
         for(int i = 0;i < interfaces.length;i++) this.interfaces[i] = constPool.addClassInfo(interfaces[i]);
 
-        attributes.add(new Attribute((short) constPool.addUtf8Info("SourceFile"), 2, (short) constPool.addUtf8Info(src)));
+        attributes.add(new SignatureAttribute((short) constPool.addUtf8Info("SourceFile"), (short) constPool.addUtf8Info(src)));
     }
 
     void addField(String name, Field field){
@@ -61,7 +63,16 @@ final class JVMWritableClass {
     }
 
     void addMethod(String name, Method method){
-        methods.add(new MethodInfo(Flag.getAccessFlag(method.mod), constPool.addUtf8Info(name), constPool.addMethodDescriptor(method.desc)));
+        int[] name_indexes = new int[method.desc.parameters.length];
+        int[] access_flags = new int[method.desc.parameters.length];
+
+        for(int i=0;i<method.desc.parameters.length;i++){
+            name_indexes[i] = constPool.addUtf8Info(method.desc.parameters[i].name);
+            access_flags[i] = 0;
+        }
+
+        MethodParametersAttribute parametersAttribute = new MethodParametersAttribute(constPool.addUtf8Info("MethodParameters"), name_indexes, access_flags);
+        methods.add(new MethodInfo(Flag.getAccessFlag(method.mod), constPool.addUtf8Info(name), constPool.addMethodDescriptor(method.desc), parametersAttribute));
     }
 
     int getAccessFlag(){

@@ -18,7 +18,9 @@ package katajaLang.jvm.writing;
 
 import katajaLang.compiler.CompilerConfig;
 import katajaLang.compiler.CompilingException;
-import katajaLang.jvm.Attribute;
+import katajaLang.jvm.attribute.Attribute;
+import katajaLang.jvm.attribute.MethodParametersAttribute;
+import katajaLang.jvm.attribute.SignatureAttribute;
 import katajaLang.jvm.constpool.*;
 import katajaLang.jvm.infos.FieldInfo;
 import katajaLang.jvm.infos.MethodInfo;
@@ -215,7 +217,8 @@ final class ByteCodeWriter {
             write2(mInfo.access_flag);
             write2(mInfo.name_index);
             write2(mInfo.descriptor_index);
-            write2(0);
+            write2(1);
+            writeMethodParametersAttribute(mInfo.methodParametersAttribute);
         }
     }
 
@@ -223,38 +226,53 @@ final class ByteCodeWriter {
         write2(clazz.attributes.size());
 
         for(Attribute attribute: clazz.attributes){
-            write2(attribute.attribute_name_index);
-            write4(attribute.attribute_length);
-            write2(attribute.signature_index);
+            if(attribute instanceof SignatureAttribute) writeSignatureAttribute((SignatureAttribute) attribute);
+        }
+    }
+
+    private void writeSignatureAttribute(SignatureAttribute attribute) throws IOException {
+        write2(attribute.attribute_name_index);
+        write4(2);
+        write2(attribute.signature_index);
+    }
+
+    private void writeMethodParametersAttribute(MethodParametersAttribute attribute) throws IOException {
+        write2(attribute.attribute_name_index);
+        write4((attribute.name_indexes.length*2)+1);
+        write(attribute.name_indexes.length);
+
+        for(int i=0;i<attribute.name_indexes.length;i++){
+            write2(attribute.name_indexes[i]);
+            write2(attribute.access_flags[i]);
         }
     }
 
     private void write8(long i) throws IOException {
         stream.write(new byte[] {
-                (byte) ((i >> 56) & 0xFF),
-                (byte) ((i >> 48) & 0xFF),
-                (byte) ((i >> 40) & 0xFF),
-                (byte) ((i >> 32) & 0xFF),
-                (byte) ((i >> 24) & 0xFF),
-                (byte) ((i >> 16) & 0xFF),
-                (byte) ((i >> 8) & 0xFF),
-                (byte) (i & 0xFF)
+            (byte) ((i >> 56) & 0xFF),
+            (byte) ((i >> 48) & 0xFF),
+            (byte) ((i >> 40) & 0xFF),
+            (byte) ((i >> 32) & 0xFF),
+            (byte) ((i >> 24) & 0xFF),
+            (byte) ((i >> 16) & 0xFF),
+            (byte) ((i >> 8) & 0xFF),
+            (byte) (i & 0xFF)
         });
     }
 
     private void write4(int i) throws IOException {
         stream.write(new byte[] {
-                (byte) ((i >> 24) & 0xFF),
-                (byte) ((i >> 16) & 0xFF),
-                (byte) ((i >> 8) & 0xFF),
-                (byte) (i & 0xFF)
+            (byte) ((i >> 24) & 0xFF),
+            (byte) ((i >> 16) & 0xFF),
+            (byte) ((i >> 8) & 0xFF),
+            (byte) (i & 0xFF)
         });
     }
 
     private void write2(int i) throws IOException {
         stream.write(new byte[] {
-                (byte) ((i >> 8) & 0xFF),
-                (byte) (i & 0xFF)
+            (byte) ((i >> 8) & 0xFF),
+            (byte) (i & 0xFF)
         });
     }
 

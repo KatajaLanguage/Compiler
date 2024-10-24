@@ -14,16 +14,16 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package katajaLang.jvm;
+package katajaLang.jvm.attribute;
 
-public final class Attribute{
-    public final short attribute_name_index;
-    public final int attribute_length;
-    public final short signature_index;
+public final class MethodParametersAttribute implements Attribute{
+    public final int attribute_name_index;
+    public final int[] name_indexes;
+    public final int[] access_flags;
 
-    public Attribute(short attribute_name_index, int attribute_length, short signature_index){
+    public MethodParametersAttribute(int attribute_name_index, int[] name_indexes, int[] access_flags){
         this.attribute_name_index = attribute_name_index;
-        this.attribute_length = attribute_length;
-        this.signature_index = signature_index;
+        this.name_indexes = name_indexes;
+        this.access_flags = access_flags;
     }
 }

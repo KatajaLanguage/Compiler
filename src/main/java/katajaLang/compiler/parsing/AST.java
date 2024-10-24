@@ -14,23 +14,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package katajaLang.model;
+package katajaLang.compiler.parsing;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
-public final class Interface extends Compilable{
-
-    public final HashMap<Method.MethodDesc, Method> methods = new HashMap<>();
-
-    public Interface(Uses uses, String src, Modifier mod, ArrayList<String> interfaces){
-        super(uses, src, mod, interfaces);
-    }
-
-    @Override
-    public void validateTypes(String className) {
-        super.validateTypes(className);
-
-        for(Method method: methods.values()) method.validateTypes(className);
-    }
+public abstract class AST {
 }

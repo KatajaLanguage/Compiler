@@ -16,14 +16,18 @@
 
 package katajaLang.jvm.infos;
 
+import katajaLang.jvm.attribute.MethodParametersAttribute;
+
 public final class MethodInfo implements Info{
     public final int access_flag;
     public final int name_index;
     public final int descriptor_index;
+    public final MethodParametersAttribute methodParametersAttribute;
 
-    public MethodInfo(int access_flag, int name_index, int descriptor_index){
+    public MethodInfo(int access_flag, int name_index, int descriptor_index, MethodParametersAttribute methodParametersAttribute){
         this.access_flag = access_flag;
         this.name_index = name_index;
         this.descriptor_index = descriptor_index;
+        this.methodParametersAttribute = methodParametersAttribute;
     }
 }

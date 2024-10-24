@@ -16,6 +16,7 @@
 
 package katajaLang.model;
 
+import katajaLang.compiler.parsing.AST;
 import katajaLang.model.type.ComplexType;
 import katajaLang.model.type.DataType;
 
@@ -58,6 +59,7 @@ public final class Method {
     public final Modifier mod;
     public final MethodDesc desc;
     public final String code;
+    public AST[] ast = null;
 
     public Method(Uses uses, Modifier mod, MethodDesc desc, String code){
         this.uses = uses;
@@ -66,12 +68,17 @@ public final class Method {
         this.code = code;
     }
 
-    public void validateType(String className){
+    public void validateTypes(String className){
         DataType dataType = desc.type.ignoreArray();
 
         if(dataType instanceof ComplexType)
             ((ComplexType) dataType).validate(uses, className);
 
+        for(Parameter parameter: desc.parameters){
+            dataType = parameter.type.ignoreArray();
 
+            if(dataType instanceof ComplexType)
+                ((ComplexType) dataType).validate(uses, className);
+        }
     }
 }

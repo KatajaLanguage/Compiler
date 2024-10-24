@@ -51,5 +51,6 @@ public class Class extends Compilable{
         super.validateTypes(className);
 
         for(Field field: fields.values()) field.validateType(className);
+        for(Method method: methods.values()) method.validateTypes(className);
     }
 }
