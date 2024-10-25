@@ -1,5 +1,7 @@
 public abstract class Test{
-    public abstract void test(int i, double d)
+    public void test(int i, double d){
+        return;
+    }
 }
 
 ##

@@ -17,4 +17,9 @@
 package katajaLang.compiler.parsing;
 
 public abstract class AST {
+    public String type = null;
+
+    public static final class Return extends AST{
+
+    }
 }

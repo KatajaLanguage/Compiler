@@ -238,7 +238,7 @@ final class ByteCodeWriter {
 
     private void writeMethodParametersAttribute(MethodParametersAttribute attribute) throws IOException {
         write2(attribute.attribute_name_index);
-        write4((attribute.name_indexes.length*2)+1);
+        write4(attribute.name_indexes.length*2);
         write(attribute.name_indexes.length);
 
         for(int i=0;i<attribute.name_indexes.length;i++){

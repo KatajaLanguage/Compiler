@@ -169,7 +169,6 @@ public final class Parser {
         }
 
         current = null;
-        th.assertEndOfStatement();
 
         if(!classes.containsKey(name)) classes.put(name, clazz);
         else err("Class "+name+" is already defined");
@@ -197,7 +196,6 @@ public final class Parser {
 
         th.assertToken("{");
         while(!th.isNext("}")) parseMod();
-        th.assertEndOfStatement();
 
         current = null;
 

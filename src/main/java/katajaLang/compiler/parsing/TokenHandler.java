@@ -144,7 +144,7 @@ public final class TokenHandler {
      * Assert that the next Token is a ';' or that the Handler reached the end of the Line
      */
     public void assertEndOfStatement(){
-        if(index + 1 != token[line].length) assertToken(";");
+        assertToken(";");
     }
 
     /**
@@ -180,8 +180,6 @@ public final class TokenHandler {
      * Returns whether the next Token is a ';' or that the Handler reached the end of the Line
      */
     public boolean isEndOfStatement(){
-        if(index + 1 == token[line].length) return true;
-
         return isNext(";");
     }
 
