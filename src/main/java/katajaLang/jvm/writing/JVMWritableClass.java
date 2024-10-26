@@ -17,6 +17,7 @@
 package katajaLang.jvm.writing;
 
 import katajaLang.jvm.attribute.Attribute;
+import katajaLang.jvm.attribute.CodeAttribute;
 import katajaLang.jvm.attribute.MethodParametersAttribute;
 import katajaLang.jvm.attribute.SignatureAttribute;
 import katajaLang.jvm.bytecode.Flag;
@@ -72,7 +73,8 @@ final class JVMWritableClass {
         }
 
         MethodParametersAttribute parametersAttribute = new MethodParametersAttribute(constPool.addUtf8Info("MethodParameters"), name_indexes, access_flags);
-        methods.add(new MethodInfo(Flag.getAccessFlag(method.mod), constPool.addUtf8Info(name), constPool.addMethodDescriptor(method.desc), parametersAttribute));
+        CodeAttribute codeAttribute = new CodeAttribute(constPool.addUtf8Info("Code"));
+        methods.add(new MethodInfo(Flag.getAccessFlag(method.mod), constPool.addUtf8Info(name), constPool.addMethodDescriptor(method.desc), parametersAttribute, codeAttribute));
     }
 
     int getAccessFlag(){

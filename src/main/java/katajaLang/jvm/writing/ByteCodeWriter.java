@@ -19,6 +19,7 @@ package katajaLang.jvm.writing;
 import katajaLang.compiler.CompilerConfig;
 import katajaLang.compiler.CompilingException;
 import katajaLang.jvm.attribute.Attribute;
+import katajaLang.jvm.attribute.CodeAttribute;
 import katajaLang.jvm.attribute.MethodParametersAttribute;
 import katajaLang.jvm.attribute.SignatureAttribute;
 import katajaLang.jvm.constpool.*;
@@ -217,8 +218,9 @@ final class ByteCodeWriter {
             write2(mInfo.access_flag);
             write2(mInfo.name_index);
             write2(mInfo.descriptor_index);
-            write2(1);
+            write2(2);
             writeMethodParametersAttribute(mInfo.methodParametersAttribute);
+            writeCodeAttribute(mInfo.codeAttribute);
         }
     }
 
@@ -238,13 +240,24 @@ final class ByteCodeWriter {
 
     private void writeMethodParametersAttribute(MethodParametersAttribute attribute) throws IOException {
         write2(attribute.attribute_name_index);
-        write4(attribute.name_indexes.length*2);
+        write4(attribute.name_indexes.length*4+1);
         write(attribute.name_indexes.length);
 
         for(int i=0;i<attribute.name_indexes.length;i++){
             write2(attribute.name_indexes[i]);
             write2(attribute.access_flags[i]);
         }
+    }
+
+    private void writeCodeAttribute(CodeAttribute code) throws IOException {
+        write2(code.attribute_name_index);
+        write4(12+code.code.size());
+        write2(code.max_stack);
+        write2(code.max_locals);
+        write4(code.code.size());
+        for(Integer i: code.code) write(i);
+        write2(0);
+        write2(0);
     }
 
     private void write8(long i) throws IOException {
